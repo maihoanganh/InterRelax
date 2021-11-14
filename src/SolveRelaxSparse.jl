@@ -1,15 +1,23 @@
-function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64,d::Int64;assign="min",alg="MD",minimize=true)
+function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64,d::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=d,comp_opt_sol=false)
+    
+    if k>0
+        return RelaxSparse_with_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol)
+    else
+        return RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol)
+    end
+end
+
+
+
+function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64,d::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=d,comp_opt_sol=false)
     
     
-    I,p,lI=clique_decomp(n,m+l,[dg;dh],[[supp_f];supp_g;supp_h],order=k,alg=alg,minimize=minimize) 
+    I,p,lI=clique_decomp(n,m+l,[dg;dh],[[supp_f];supp_g;supp_h],order=order,alg=alg,minimize=minimize) 
     J,lJ,~=get_indcons(m,supp_g,I,p,lI,assign=assign)
     W,lW,~=get_indcons(l,supp_h,I,p,lI,assign=assign)
     
     
     m+=1
-    #=append(lmon_g,[1])
-    append(supp_g,[spzeros(UInt64,n,1)])
-    append(coe_g,[ones(Float64,1)])=#
     
     lmon_g=[lmon_g;1]
     supp_g=[supp_g;[spzeros(UInt64,n,1)]]
@@ -21,6 +29,8 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
         J[t]=[J[t];m]
         lJ[t]+=1
     end
+    
+    
     
     
     
@@ -49,13 +59,24 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
     
     
     v=Vector{Matrix{UInt64}}(undef,p)
+    vmod=Vector{Matrix{UInt16}}(undef,p)
     
     supp_U=Vector{Matrix{UInt64}}(undef,p)
     lsupp_U=Vector{Int64}(undef,p)
     
     
+    if solver=="Mosek"
+        model=Model(with_optimizer(Mosek.Optimizer, QUIET=false))
+    elseif solver=="SDPT3"
+        model=Model(SDPT3.Optimizer)
+    elseif solver=="SDPNAL"
+        model=Model(SDPNAL.Optimizer)
+    elseif solver=="COSMO"
+        model=Model(COSMO.Optimizer)
+    else
+        error("No SDP solver!!!")
+    end
     
-    model=Model(with_optimizer(Mosek.Optimizer, QUIET=false))
     
     u=Vector{Vector{VariableRef}}(undef, p)
     lu=Vector{Int64}(undef, p)
@@ -137,7 +158,7 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
         
         
 
-        
+        vmod[t]=mod.(v[t],2)
     
         r=1
         q=1
@@ -152,7 +173,7 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
                 len_block_G[t][i][j]=0
                 r=j
                 while len_block_G[t][i][j] <= s-1 && r <= sk_g[t][i]
-                    if findfirst(isodd,v[t][:,j]+v[t][:,r])==nothing
+                    if norm(vmod[t][:,j]-vmod[t][:,r],1)==0
                         append!(block_G[t][i][j],r)
                         len_block_G[t][i][j]+=1
                     end
@@ -172,6 +193,7 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
                 if maxsize<len_block_G[t][i][j]
                     maxsize=len_block_G[t][i][j]
                 end
+                #println(maxsize)
             end
         end
     
@@ -226,7 +248,7 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
         end
 
         for i in 1:lsupp_U[t]
-            cons[t][bfind(supp_U[t],lsupp_U[t],supp_U[t][:,i],lI[t])]-=coe_thetakU[t][i]
+            cons[t][i]-=coe_thetakU[t][i]
         end
 
         @constraint(model, cons[t].==0)                
@@ -270,15 +292,42 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
 
     @objective(model, Max, lambda)
                     
-    println("Maximal matrix size:", maxsize)                
+    println(" Maximal matrix size:", maxsize)                
                     
     optimize!(model)
 
     opt_val = value(lambda)
     println("Termination status = ", termination_status(model))
     println("Optimal value = ",opt_val)
+    
+    
+    opt_sol=[Vector{Float64}([]) for t in 1:p]
+    if comp_opt_sol
+        
+        Gr=Vector{Matrix{Float64}}(undef,p)
+        for t in 1:p
+            println("---------------")
+            println("Clique $(t):")
 
-    return opt_val
+            Gr[t]=zeros(Float64,sk_g[t][lJ[t]],sk_g[t][lJ[t]])
+
+            for j in 1:sk_g[t][lJ[t]]
+                if len_block_G[t][lJ[t]][j]>1
+                    Gr[t][block_G[t][lJ[t]][j],block_G[t][lJ[t]][j]]+=value.(G[t][lJ[t]][j])
+                elseif len_block_G[t][lJ[t]][j]==1
+                    Gr[t][block_G[t][lJ[t]][j],block_G[t][lJ[t]][j]]+=[value.(G[t][lJ[t]][j])]
+                end
+
+            end
+
+
+            opt_sol[t]=extract_optimizer_clique(Gr[t],sk_g[t][lJ[t]],v[t][:,1:sk_g[t][lJ[t]]],lI[t],lJ[t],lW[t],lmon_g[J[t]],supp_g[J[t]],coe_g[J[t]],lmon_h[W[t]],supp_h[W[t]],coe_h[W[t]])
+            println("---------------")
+        end
+        
+    end
+
+    return opt_val,opt_sol
 
 end        
             

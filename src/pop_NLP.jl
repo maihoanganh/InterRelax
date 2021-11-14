@@ -1,13 +1,13 @@
-function POP_NLP(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,a)
+function POP_NLP(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,starpoint)
     @time begin
-    model = Model(with_optimizer(Ipopt.Optimizer))
+    model = Model(Ipopt.Optimizer)
         
-    set_optimizer_attribute(model, "print_level", 0)
+    #set_optimizer_attribute(model, "print_level", 0)
         
     @variable(model, x[1:n])
 
-    
-    set_start_value.(x, a)
+    set_start_value.(x, starpoint)
+    #set_start_value.(x, ones(Float64,n))
 
     function get_func(lmon,supp,coe)
         f=0

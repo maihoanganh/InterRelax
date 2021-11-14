@@ -1,4 +1,4 @@
-function get_indcons(m::Int64,supp_g::Vector{SparseMatrixCSC{UInt64}},I::Vector{Vector{UInt16}},p::Int64,lI::Vector{Int64};assign::String="first")
+function get_indcons(m::Int64,supp_g::Vector{SparseMatrixCSC{UInt64}},I,p::Int64,lI::Vector{Int64};assign::String="first")
     
     J=[UInt64[] for i in 1:p]
     ind=UInt64(0)

@@ -1,3 +1,60 @@
+evaluate_poly(lmon,supp,coe,a,n)=sum(coe[i]*prod(a[j]^supp[j,i] for j=1:n) for i=1:lmon)
+    
+    
+
+
+function add_orthogonal_cons(n,lmon_g,supp_g,coe_g)
+
+    lmon_g=[lmon_g;ones(UInt64,n)]
+    alpha=zeros(UInt64,n,1)
+
+    for j in 1:n
+        alpha=zeros(UInt64,n,1)
+        alpha[j]=1
+        supp_g=[supp_g;[alpha]]
+        coe_g=[coe_g;[ones(Float64,1)]]
+    end
+    
+    return lmon_g,supp_g,coe_g
+end
+
+gap(a,b)=abs(a-b)/abs(b)
+
+function get_POP(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f)
+
+    lmon_g,supp_g,coe_g=add_orthogonal_cons(n,lmon_g,supp_g,coe_g)
+    m+=n
+    
+    @polyvar x[1:n]
+
+    f=get_poly(lmon_f, supp_f, coe_f,x,n)
+    
+    g=Vector{Polynomial{true,Float64}}(undef,m)
+    
+    for j in 1:m
+        g[j]=get_poly(lmon_g[j], supp_g[j], coe_g[j],x,n)
+    end
+    
+    h=Vector{Polynomial{true,Float64}}(undef,l)
+    
+    for j in 1:l
+        h[j]=get_poly(lmon_h[j], supp_h[j], coe_h[j],x,n)
+    end
+    
+    return x,[[f];g;h]
+    
+end
+
+
+function get_poly(lmon, supp, coe,x,n)
+    f=Polynomial{true,Float64}(1.0*x[1]-x[1])
+    for j=1:lmon
+        f+=coe[j]*prod(x[i]^supp[i,j] for i=1:n)
+    end
+    return f
+end
+
+
 function get_info(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},g::Vector{Polynomial{true,Float64}},h::Vector{Polynomial{true,Float64}};sparse::Bool=false)
     n=length(x)
     m=length(g)

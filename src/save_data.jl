@@ -193,3 +193,89 @@ function save_info_densePOP(randx,n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     close(output_file)
     
 end
+
+
+
+
+
+
+function save_info_mat(n,A)
+
+    output_file = open("mat_size$(n).jl","w")
+
+    write(output_file, "# We are saving information of matrix here. \n \n")
+    
+    write(output_file, "n = ")
+    show(output_file, n)
+    write(output_file, "; \n \n")
+    
+    write(output_file, "A = ")
+    show(output_file, A)
+    write(output_file, "; \n \n")
+    
+  
+    
+    close(output_file)
+    
+end
+
+
+function save_info_mat_stability(n,A)
+
+    output_file = open("mat_stability_size$(n).jl","w")
+
+    write(output_file, "# We are saving information of matrix here. \n \n")
+    
+    write(output_file, "n = ")
+    show(output_file, n)
+    write(output_file, "; \n \n")
+    
+    write(output_file, "A = ")
+    show(output_file, A)
+    write(output_file, "; \n \n")
+    
+  
+    
+    close(output_file)
+    
+end
+
+function save_info_mat_copositivity(n,A)
+
+    output_file = open("mat_copositivity_size$(n).jl","w")
+
+    write(output_file, "# We are saving information of matrix here. \n \n")
+    
+    write(output_file, "n = ")
+    show(output_file, n)
+    write(output_file, "; \n \n")
+    
+    write(output_file, "A = ")
+    show(output_file, A)
+    write(output_file, "; \n \n")
+    
+  
+    
+    close(output_file)
+    
+end
+
+function save_info_vec_nonneg(n,c)
+
+    output_file = open("vec_nonneg_var$(n).jl","w")
+
+    write(output_file, "# We are saving information of matrix here. \n \n")
+    
+    write(output_file, "n = ")
+    show(output_file, n)
+    write(output_file, "; \n \n")
+    
+    write(output_file, "c = ")
+    show(output_file, c)
+    write(output_file, "; \n \n")
+    
+  
+    
+    close(output_file)
+    
+end
