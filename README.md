@@ -64,7 +64,7 @@ See other examples from .ipynb files in the [link](https://github.com/maihoangan
 # References
 For more details, please refer to:
 
-**N. H. A. Mai, J.-B. Lasserre, V. Magron and K-C Toh. A hierarchy of interrupted relaxations forpolynomial optimization on the nonnegative orthant. 2020. Forthcoming.**
+**N. H. A. Mai, V. Magron, J.-B. Lasserre and K-C Toh. A hierarchy of interrupted relaxations forpolynomial optimization on the nonnegative orthant. 2020. Forthcoming.**
 
 The following codes are to run the paper's benchmarks:
 ```ruby
