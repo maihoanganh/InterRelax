@@ -1,3 +1,33 @@
+function test()
+    @polyvar x[1:2] # nonnegative variables
+
+    f=x[1]^2+0.5*x[1]*x[2]-0.25*x[2]^2+0.75*x[1]-0.3*x[2] # the objective polynomial to minimize
+
+    g=[1.0-sum(x.^2)] # the inequality constraints
+    h=[(x[1]-1.0)*x[2]] # the equality constraints
+
+    k=1 # relaxation order
+    s=3 # sparsity order
+
+    # get information from the input data f,gi,hj
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
+
+    # get an approximate optimal value and an approximate optimal solution of the polynomial optimization problem
+    opt_val,opt_sol=InterRelax.RelaxDense(n,m,l,
+                                          lmon_g,supp_g,coe_g, # information of the inequality constraints
+                                          lmon_h,supp_h,coe_h, # information of the equality constraints
+                                          lmon_f,supp_f,coe_f, # information of the objective polynomial
+                                          dg,dh,k,s,
+                                          solver="Mosek", # solver for the semidefinite program
+                                          comp_opt_sol=true) # to get an approximate optimal solution
+    
+end
+
+
+
+
+
+
 function test_AMGM()
     
     println("***Problem setting***")
