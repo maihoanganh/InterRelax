@@ -13,9 +13,6 @@ InterRelax has been implemented on a desktop compute with the following software
 - Ubuntu 18.04.4
 - Julia 1.3.1
 
-The following sofwares are used for comparison purposes:
-- [TSSOS](https://github.com/wangjie212/TSSOS)
-
 Before installing InterRelax, you should install [TSSOS](https://github.com/wangjie212/TSSOS) and [PolyPowerModels](https://github.com/tweisser/PolyPowerModels) with the following commands:
 ```ruby
 Pkg> add https://github.com/wangjie212/TSSOS
@@ -61,7 +58,7 @@ n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRel
                                           comp_opt_sol=true) # to get an approximate optimal solution
 ```
 
-See other examples in the [link](https://github.com/maihoanganh/InterRelax/tree/main/examples).
+See other examples from .ipynb files in the [link](https://github.com/maihoanganh/InterRelax/tree/main/examples).
 
 
 # References
