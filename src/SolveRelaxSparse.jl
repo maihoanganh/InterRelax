@@ -1,9 +1,14 @@
 function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64,d::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=d,comp_opt_sol=false)
     
+    println("**Interrupted relaxation based on Putinar-Vasilescu's Positivstellensatz**")
+    println("Relaxation order: k=",k)
+    println("Sparsity order: s=",s)
+    println("Sparsity order: d=",d)
+    
     if k>0
-        return RelaxSparse_with_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol)
+        return RelaxSparse_with_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
     else
-        return RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol)
+        return RelaxSparse_without_multiplier1(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
     end
 end
 
@@ -66,7 +71,7 @@ function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{U
     
     
     if solver=="Mosek"
-        model=Model(with_optimizer(Mosek.Optimizer, QUIET=false))
+        model=Model(optimizer_with_attributes(Mosek.Optimizer, MOI.Silent() => false))
     elseif solver=="SDPT3"
         model=Model(SDPT3.Optimizer)
     elseif solver=="SDPNAL"

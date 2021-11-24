@@ -1,4 +1,14 @@
-function RelaxSparse_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,d::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=d,comp_opt_sol=false)
+function RelaxSparse_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,k::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=k,comp_opt_sol=false)
+    
+    println("**Interrupted relaxation based on Handelman's Positivstellensatz**")
+    println("Relaxation order: k=",k)
+    println("Sparsity order: s=",s)
+    
+   return RelaxSparse_without_multiplier1(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
+end
+
+
+function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,d::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=d,comp_opt_sol=false)
     
     
     I,p,lI=clique_decomp(n,m+l,[dg;dh],[[supp_f];supp_g;supp_h],order=order,alg=alg,minimize=minimize) 
@@ -45,7 +55,7 @@ function RelaxSparse_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vecto
     
     
     if solver=="Mosek"
-        model = Model(optimizer_with_attributes(Mosek.Optimizer, "QUIET" => false))
+        model = Model(optimizer_with_attributes(Mosek.Optimizer, MOI.Silent() => false))
     elseif solver=="SDPT3"
         model=Model(SDPT3.Optimizer)
     elseif solver=="SDPNAL"

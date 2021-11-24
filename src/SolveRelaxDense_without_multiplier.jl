@@ -1,6 +1,11 @@
 
 function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{Matrix{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{Matrix{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::Matrix{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64;solver="Mosek")
     
+    println("**Interrupted relaxation based on Handelman's Positivstellensatz**")
+    
+    println("Relaxation order: k=",k)
+    println("Sparsity order: s=",s)
+    
     m+=1
     
     lmon_g=[lmon_g;1]
@@ -9,7 +14,6 @@ function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector
     
     dg=[dg;0]
     
-    df=Int64(maximum([sum(supp_f[:,i]) for i in 1:lmon_f]))#+1
     
     supp_f*=2
     
@@ -30,7 +34,7 @@ function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector
     
     lmon_thetakf,supp_thetakf,coe_thetakf=mulpoly(n,lmon_thetak,supp_thetak,coe_thetak,lmon_f,supp_f,coe_f)
     
-    v=get_basis(n,k+df)
+    v=get_basis(n,k)
         
     supp_U=2*v
     
@@ -39,18 +43,18 @@ function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector
     lsupp_U=size(supp_U,2)   
    
      
-    sk=binomial(k+df+n,n)
+    sk=binomial(k+n,n)
     sk_g=Vector{UInt64}(undef,m)
     sk_h=Vector{UInt64}(undef,l)
 
 
     @fastmath @inbounds @simd for i in 1:m
-        sk_g[i]=binomial(k+df-dg[i]+n,n)
+        sk_g[i]=binomial(k-dg[i]+n,n)
         supp_g[i]*=2
     end
     
     @fastmath @inbounds @simd for i in 1:l
-        sk_h[i]=binomial(k+df-dh[i]+n,n)
+        sk_h[i]=binomial(k-dh[i]+n,n)
         supp_h[i]*=2
     end
     
@@ -107,7 +111,7 @@ function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector
     #ENV["MATLAB_ROOT"] = "/usr/local/MATLAB/R2018a/toolbox/local"
     
     if solver=="Mosek"
-        model=Model(with_optimizer(Mosek.Optimizer, QUIET=false))
+        model=Model(optimizer_with_attributes(Mosek.Optimizer, MOI.Silent() => false))
     elseif solver=="SDPT3"
         model=Model(SDPT3.Optimizer)
     elseif solver=="SDPNAL"

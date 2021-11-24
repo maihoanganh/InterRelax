@@ -279,3 +279,24 @@ function save_info_vec_nonneg(n,c)
     close(output_file)
     
 end
+
+
+function save_info_vec_binary(n,c)
+
+    output_file = open("vec_binary_var$(n).jl","w")
+
+    write(output_file, "# We are saving information of matrix here. \n \n")
+    
+    write(output_file, "n = ")
+    show(output_file, n)
+    write(output_file, "; \n \n")
+    
+    write(output_file, "c = ")
+    show(output_file, c)
+    write(output_file, "; \n \n")
+    
+  
+    
+    close(output_file)
+    
+end

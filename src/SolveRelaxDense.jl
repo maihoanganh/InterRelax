@@ -1,6 +1,10 @@
 
 function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{Matrix{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{Matrix{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::Matrix{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64;solver="Mosek",comp_opt_sol=false)
     
+    println("**Interrupted relaxation based on Putinar-Vasilescu's Positivstellensatz**")
+    println("Relaxation order: k=",k)
+    println("Sparsity order: s=",s)
+    
     m+=1
     
     lmon_g=[lmon_g;1]
@@ -112,7 +116,7 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     #ENV["MATLAB_ROOT"] = "/usr/local/MATLAB/R2018a/toolbox/local"
     
     if solver=="Mosek"
-        model=Model(with_optimizer(Mosek.Optimizer, QUIET=false))
+        model=Model(optimizer_with_attributes(Mosek.Optimizer, MOI.Silent() => false))
     elseif solver=="SDPT3"
         model=Model(SDPT3.Optimizer)
     elseif solver=="SDPNAL"

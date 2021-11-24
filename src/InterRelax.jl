@@ -1,10 +1,11 @@
-module InterruptedRelax
+module InterRelax
 
-using Libdl, Printf, Compat
+#using Libdl, Printf, Compat
 
-using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, Arpack, SumOfSquares, LightGraphs, PolyPowerModels, COSMO, PowerModels, Ipopt, RowEchelon
+using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, SumOfSquares, LightGraphs, PolyPowerModels, COSMO, PowerModels, Ipopt, RowEchelon, MatrixMarket
 
-#using TSSOS
+using TSSOS
+
 
 #using SDPNAL
 
@@ -27,12 +28,14 @@ include("./SolveRelaxSparse_without_multiplier.jl")
     
 
 include("./pop_NLP.jl")
+include("./runTSSOS.jl")
 include("./chordal_extension.jl")
 include("./clique_merge.jl")
 include("./basic_func_sparse.jl")
 include("./save_data.jl")
 include("./pop_dense_SOS.jl")
 include("./pop_opf.jl")
+include("./test.jl")
 
 end
 
