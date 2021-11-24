@@ -1,11 +1,11 @@
 # InterRelax
 InterRelax is a Julia package of solving polynomial optimization problem on the nonnegative orthant:
-
-**f^* := inf_{x in R^n} { f(x) : x >= 0, gi(x) >= 0, hj(x) = 0 }.**
-
+```
+f^* := inf_{x in R^n} {f(x) : x >= 0, gi(x) >= 0, hj(x) = 0}.
+```
 We provide a hierarchy of semidefinite relaxations based on Putinar-Valilescu's Positivstellensatz for solving this problem. It has the following advantages:
 - The maxmal matrix size of each semidefinite relaxation can be arbitrarily chosen. Accordingly, each semidefinite relaxation of relative small maxmal matrix size can be solved efficiently by using interior point methods (Mosek, SDPT3, ...).
-- We guarantee the convergence of the sequence of values returned by this hierarchy to **f^** under some mild condition. Moreover, the rate of convergence is at least **O(eps^-c)**.
+- We guarantee the convergence of the sequence of values returned by this hierarchy to ```f^``` under some mild condition. Moreover, the rate of convergence is at least ```O(eps^-c)```.
 
 
 # Required softwares
@@ -16,9 +16,10 @@ InterRelax has been implemented on a desktop compute with the following software
 The following sofwares are used for comparison purposes:
 - [TSSOS](https://github.com/wangjie212/TSSOS)
 
-Before installing InterRelax, you should install [TSSOS](https://github.com/wangjie212/TSSOS) with the following commands:
+Before installing InterRelax, you should install [TSSOS](https://github.com/wangjie212/TSSOS) and [PolyPowerModels](https://github.com/tweisser/PolyPowerModels) with the following commands:
 ```ruby
 Pkg> add https://github.com/wangjie212/TSSOS
+Pkg> add https://github.com/tweisser/PolyPowerModels.git
 ```
 
 # Installation

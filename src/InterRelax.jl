@@ -2,7 +2,7 @@ module InterRelax
 
 #using Libdl, Printf, Compat
 
-using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, SumOfSquares, LightGraphs, PolyPowerModels, COSMO, PowerModels, Ipopt, RowEchelon, MatrixMarket
+using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, SumOfSquares, LightGraphs, COSMO, PowerModels, Ipopt, RowEchelon, MatrixMarket, PolyPowerModels
 
 using TSSOS
 
