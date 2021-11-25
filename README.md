@@ -66,19 +66,24 @@ For more details, please refer to:
 
 **N. H. A. Mai, V. Magron, J.-B. Lasserre and K-C Toh. A hierarchy of interrupted relaxations forpolynomial optimization on the nonnegative orthant. 2020. Forthcoming.**
 
+To get the paper's benchmarks, download the zip file in this [link](https://drive.google.com/file/d/1xGG1NqDk9NDtBmu0bd2FmxZpz1kYeZp6/view?usp=sharing) and unzip the file.
+
 The following codes are to run the paper's benchmarks:
 ```ruby
 using InterRelax
 
+data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data 
+#The path needs to be changed on the user's computer
+
 InterRelax.test()
 InterRelax.test_AMGM() #Table 1
-InterRelax.test_dense_POP_arbcons() #Tables 3 and 11
-InterRelax.test_CS_POP_arbcons() #Tables 4 and 12
-InterRelax.test_PMSV() #Table 5
-InterRelax.test_compute_stability_number_of_graph_random() #Table 6
-InterRelax.test_compute_stability_number_of_graph() #Table 7
-InterRelax.test_deciding_copositivity() #Table 8
-InterRelax.test_deciding_nonegativity() #Table 9
-InterRelax.test_dense_POP_binary_constr_random() #Table 10
+InterRelax.test_dense_POP_arbcons(data) #Tables 3 and 11
+InterRelax.test_CS_POP_arbcons(data) #Tables 4 and 12
+InterRelax.test_PMSV(data) #Table 5
+InterRelax.test_compute_stability_number_of_graph_random(data) #Table 6
+InterRelax.test_compute_stability_number_of_graph(data) #Table 7
+InterRelax.test_deciding_copositivity(data) #Table 8
+InterRelax.test_deciding_nonegativity(data) #Table 9
+InterRelax.test_dense_POP_binary_constr_random(data) #Table 10
 
 ```

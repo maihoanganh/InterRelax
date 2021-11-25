@@ -110,14 +110,14 @@ end
 
 
 
-function test_dense_POP_arbcons()
+function test_dense_POP_arbcons(data)
     
     Pb=0
     Id=0
     k=0
     s=1
     comp_opt_sol=true
-    include("../examples/densePOPvar$(20)nineq$(1)neq$(0).jl")
+    include(data*"/densePOPvar$(20)nineq$(1)neq$(0).jl")
     
     
     for n1 in [20;30]
@@ -143,7 +143,7 @@ function test_dense_POP_arbcons()
                 println("-------------------------------")
                 println()
                 
-                include("../examples/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
+                include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
                 k=k_Pu
                 TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
                 
@@ -154,7 +154,7 @@ function test_dense_POP_arbcons()
                 println()
 
                 
-                include("../examples/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
+                include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
 
                 if Id in [1;2;3;5;7;8;9;10]
                     k=0
@@ -189,7 +189,7 @@ function test_dense_POP_arbcons()
                 println()
 
                 
-                include("../examples/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
+                include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
                 
                 if Id in [1;2;3;5;7;8;9]
                     k=2
@@ -229,14 +229,14 @@ end
 
 
 
-function test_CS_POP_arbcons()
+function test_CS_POP_arbcons(data)
     n=1000
     Pb=0
     Id=0
     d=Int64(0)
     k=1
     s=1
-    include("../examples/sparsePOPcliq$(10)nineq$(ceil(Int64, n/5))neq$(0).jl")
+    include(data*"/sparsePOPcliq$(10)nineq$(ceil(Int64, n/5))neq$(0).jl")
     
     for u in [10;20]
         
@@ -263,7 +263,7 @@ function test_CS_POP_arbcons()
                 println()
                 
                 
-                include("../examples/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
+                include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
                 k=k_Pu
                 println("Maximal matrix size: ",binomial(u+1+k,k))
                 TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
@@ -273,7 +273,7 @@ function test_CS_POP_arbcons()
                 println()
 
                 
-                include("../examples/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
+                include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
 
                 if Id in [1;2;3;5;6;7]
                     k=0
@@ -308,7 +308,7 @@ function test_CS_POP_arbcons()
                 println()
 
                 
-                include("../examples/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
+                include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
                 
                 if Id in [1;2;3;5;6;7]
                     k=2
@@ -349,13 +349,13 @@ end
 
 
 
-function test_PMSV()
+function test_PMSV(data)
     
     Pb=0
     Id=0
     k=0
     s=1
-    n=16; include("../examples/mat_size$(n).jl")
+    n=16; include(data*"/mat_size$(n).jl")
     
     @polyvar x[1:n]
     f=sum(-A[i,j]*x[i]*x[j] for i=1:n for j=1:n)
@@ -372,7 +372,7 @@ function test_PMSV()
         
         println("Ordinal number of POP: Pb=",Pb)
         n=m^2        
-        include("../examples/mat_size$(n).jl")
+        include(data*"/mat_size$(n).jl")
         @polyvar x[1:n]
         f=sum(-A[i,j]*x[i]*x[j] for i=1:n for j=1:n)
         g=Vector{Polynomial{true,Float64}}([]);m=length(g)
@@ -447,13 +447,13 @@ end
                         
                         
 
-function test_compute_stability_number_of_graph_random()
+function test_compute_stability_number_of_graph_random(data)
     
     Pb=0
     Id=0
     k=0
     s=1
-    n=10; include("../examples/mat_stability_size$(n).jl")
+    n=10; include(data*"/mat_stability_size$(n).jl")
     
     @polyvar x[1:n]
     f=sum(A[i,j]*x[i]*x[j] for i=1:n for j=1:n)
@@ -470,7 +470,7 @@ function test_compute_stability_number_of_graph_random()
         
         println("Ordinal number of POP: Pb=",Pb)    
         n=n1
-        include("../examples/mat_stability_size$(n).jl")
+        include(data*"/mat_stability_size$(n).jl")
         @polyvar x[1:n]
         f=sum(A[i,j]*x[i]*x[j] for i=1:n for j=1:n)
         g=Vector{Polynomial{true,Float64}}([]);m=length(g)
@@ -548,14 +548,14 @@ end
                                                 
                                                 
                                                 
-function test_compute_stability_number_of_graph()
+function test_compute_stability_number_of_graph(data)
     
     Pb="GD02_a"
     Id=0
     k=0
     s=1
 
-    A = MatrixMarket.mmread("../examples/GD02_a.mtx")
+    A = MatrixMarket.mmread(data*"/GD02_a.mtx")
 
     n=size(A,1)
     for i in 1:n
@@ -575,19 +575,19 @@ function test_compute_stability_number_of_graph()
                                                                     
                                                                     
         if n1==1
-            A = MatrixMarket.mmread("../examples/GD02_a.mtx")
+            A = MatrixMarket.mmread(data*"/GD02_a.mtx")
             Pb="GD02_a"
         elseif n1==2
-            A = MatrixMarket.mmread("../examples/johnson8-2-4.mtx")
+            A = MatrixMarket.mmread(data*"/johnson8-2-4.mtx")
             Pb="johnson8-2-4"
         elseif n1==3
-            A = MatrixMarket.mmread("../examples/johnson8-4-4.mtx")
+            A = MatrixMarket.mmread(data*"/johnson8-4-4.mtx")
             Pb="johnson8-4-4"
         elseif n1==4
-            A = MatrixMarket.mmread("../examples/hamming6-2.mtx")
+            A = MatrixMarket.mmread(data*"/hamming6-2.mtx")
             Pb="hamming6-2"
         else
-            A = MatrixMarket.mmread("../examples/hamming6-4.mtx")
+            A = MatrixMarket.mmread(data*"/hamming6-4.mtx")
             Pb="hamming6-4"
         end
                                                                     
@@ -675,13 +675,13 @@ end
                                                                         
                                                                         
                                                                         
-function test_deciding_copositivity()
+function test_deciding_copositivity(data)
     
     Pb=0
     Id=0
     k=0
     s=1
-    n=10; include("../examples/mat_copositivity_size$(n).jl")
+    n=10; include(data*"/mat_copositivity_size$(n).jl")
     
     @polyvar x[1:n]
     f=sum(A[i,j]*x[i]*x[j] for i=1:n for j=1:n)
@@ -698,7 +698,7 @@ function test_deciding_copositivity()
         
         println("Ordinal number of POP: Pb=",Pb)    
         n=n1
-        include("../examples/mat_copositivity_size$(n).jl")
+        include(data*"/mat_copositivity_size$(n).jl")
         @polyvar x[1:n]
         f=sum(A[i,j]*x[i]*x[j] for i=1:n for j=1:n)
         g=Vector{Polynomial{true,Float64}}([]);m=length(g)
@@ -769,13 +769,13 @@ end
                                                                                                 
                                                                                                 
                                                                                 
-function test_deciding_nonegativity()
+function test_deciding_nonegativity(data)
     
     Pb=0
     Id=0
     k=0
     s=1
-    n=5; include("../examples/vec_nonneg_var$(n).jl")
+    n=5; include(data*"/vec_nonneg_var$(n).jl")
     
     @polyvar x[1:n]
     v=reverse(monomials(x,4))
@@ -793,7 +793,7 @@ function test_deciding_nonegativity()
         
         println("Ordinal number of POP: Pb=",Pb)    
         n=n1
-        include("../examples/vec_nonneg_var$(n).jl")
+        include(data*"/vec_nonneg_var$(n).jl")
     
         @polyvar x[1:n]
         v=reverse(monomials(x,4))
@@ -863,13 +863,13 @@ end
                                                                                                 
                                                                                                 
                                                                                                 
-function test_dense_POP_binary_constr_random()
+function test_dense_POP_binary_constr_random(data)
     
     Pb=0
     Id=0
     k=0
     s=1
-    n=10; include("../examples/vec_binary_var$(n).jl")
+    n=10; include(data*"/vec_binary_var$(n).jl")
     
     @polyvar x[1:n]
     v=reverse(monomials(x,0:2))
@@ -887,7 +887,7 @@ function test_dense_POP_binary_constr_random()
         
         println("Ordinal number of POP: Pb=",Pb)    
         n=n1
-        include("../examples/vec_binary_var$(n).jl")
+        include(data*"/vec_binary_var$(n).jl")
     
         @polyvar x[1:n]
         v=reverse(monomials(x,0:2))
