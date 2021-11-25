@@ -1,6 +1,6 @@
 function save_info_sparsePOP(randx,u,n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh)
-
-    output_file = open("sparsePOPcliq$(u)nineq$(m)neq$(l).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/sparsePOPcliq$(u)nineq$(m)neq$(l).jl","w")
 
     write(output_file, "# We are saving information of POP here. \n \n")
     
@@ -125,8 +125,8 @@ end
 
 
 function save_info_densePOP(randx,n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh)
-
-    output_file = open("densePOPvar$(n)nineq$(m)neq$(l).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/densePOPvar$(n)nineq$(m)neq$(l).jl","w")
 
     write(output_file, "# We are saving information of POP here. \n \n")
     
@@ -200,8 +200,8 @@ end
 
 
 function save_info_mat(n,A)
-
-    output_file = open("mat_size$(n).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/mat_size$(n).jl","w")
 
     write(output_file, "# We are saving information of matrix here. \n \n")
     
@@ -221,8 +221,8 @@ end
 
 
 function save_info_mat_stability(n,A)
-
-    output_file = open("mat_stability_size$(n).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/mat_stability_size$(n).jl","w")
 
     write(output_file, "# We are saving information of matrix here. \n \n")
     
@@ -241,8 +241,8 @@ function save_info_mat_stability(n,A)
 end
 
 function save_info_mat_copositivity(n,A)
-
-    output_file = open("mat_copositivity_size$(n).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/mat_copositivity_size$(n).jl","w")
 
     write(output_file, "# We are saving information of matrix here. \n \n")
     
@@ -261,8 +261,8 @@ function save_info_mat_copositivity(n,A)
 end
 
 function save_info_vec_nonneg(n,c)
-
-    output_file = open("vec_nonneg_var$(n).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/vec_nonneg_var$(n).jl","w")
 
     write(output_file, "# We are saving information of matrix here. \n \n")
     
@@ -282,8 +282,8 @@ end
 
 
 function save_info_vec_binary(n,c)
-
-    output_file = open("vec_binary_var$(n).jl","w")
+    data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data
+    output_file = open(data*"/vec_binary_var$(n).jl","w")
 
     write(output_file, "# We are saving information of matrix here. \n \n")
     
