@@ -4,7 +4,7 @@ InterRelax is a Julia package of solving polynomial optimization problem on the 
 f* := inf_{x in R^n} {f(x) : x >= 0, gi(x) >= 0, hj(x) = 0}.
 ```
 We provide a hierarchy of semidefinite relaxations based on Putinar-Valilescu's Positivstellensatz for solving this problem. It has the following advantages:
-- The maxmal matrix size of each semidefinite relaxation can be arbitrarily chosen. Accordingly, each semidefinite relaxation of relative small maxmal matrix size can be solved efficiently by using interior point methods (Mosek, SDPT3, ...).
+- The maximal matrix size of each semidefinite relaxation can be arbitrarily chosen. Accordingly, each semidefinite relaxation of relative small maximal matrix size can be solved efficiently by using interior point methods (Mosek, SDPT3, ...).
 - We guarantee the convergence of the sequence of values returned by this hierarchy to ```f*``` under some mild condition. Moreover, the rate of convergence is at least ```O(eps^-c)```.
 
 
@@ -64,7 +64,7 @@ See other examples from .ipynb files in the [link](https://github.com/maihoangan
 # References
 For more details, please refer to:
 
-**N. H. A. Mai, V. Magron, J.-B. Lasserre and K-C Toh. A hierarchy of interrupted relaxations forpolynomial optimization on the nonnegative orthant. 2020. Forthcoming.**
+**N. H. A. Mai, V. Magron, J.-B. Lasserre and K-C Toh. A hierarchy of interrupted relaxations forpolynomial optimization on the nonnegative orthant. 2021. Forthcoming.**
 
 To get the paper's benchmarks, download the zip file in this [link](https://drive.google.com/file/d/1xGG1NqDk9NDtBmu0bd2FmxZpz1kYeZp6/view?usp=sharing) and unzip the file.
 
