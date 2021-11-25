@@ -5,21 +5,56 @@ function test()
 
     g=[1.0-sum(x.^2)] # the inequality constraints
     h=[(x[1]-1.0)*x[2]] # the equality constraints
+    
+    println("***Problem setting***")
+    println("Number of variables: n=",2)
+    m=length(g)
+    println("Number of inequality constraints: m=",m)
+    l=length(h)
+    println("Number of equality constraints: l=",l)
 
+    
+    println()
+    println("-------------------------------")
+    println()
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
+    k=2
+    
+    TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+    println()
+    println("-------------------------------")
+    println()
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
     k=1 # relaxation order
     s=3 # sparsity order
-
-    # get information from the input data f,gi,hj
+    @time RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek")
+    println()
+    println("-------------------------------")
+    println()
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
-
-    # get an approximate optimal value and an approximate optimal solution of the polynomial optimization problem
-    opt_val,opt_sol=InterRelax.RelaxDense(n,m,l,
-                                          lmon_g,supp_g,coe_g, # information of the inequality constraints
-                                          lmon_h,supp_h,coe_h, # information of the equality constraints
-                                          lmon_f,supp_f,coe_f, # information of the objective polynomial
-                                          dg,dh,k,s,
-                                          solver="Mosek", # solver for the semidefinite program
-                                          comp_opt_sol=true) # to get an approximate optimal solution
+    k=2
+    @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek")
+    println()
+    println("-------------------------------")
+    println()
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
+    k=2
+    TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+    println()
+    println("-------------------------------")
+    println()
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
+    k=1 # relaxation order
+    s=3 # sparsity order
+    d=2 
+    @time RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
+    println()
+    println("-------------------------------")
+    println()
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
+    k=2
+    @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false);
     
 end
 

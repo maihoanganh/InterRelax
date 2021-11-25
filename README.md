@@ -70,6 +70,7 @@ The following codes are to run the paper's benchmarks:
 ```ruby
 using InterRelax
 
+InterRelax.test()
 InterRelax.test_AMGM() #Table 1
 InterRelax.test_dense_POP_arbcons() #Tables 3 and 11
 InterRelax.test_CS_POP_arbcons() #Tables 4 and 12
