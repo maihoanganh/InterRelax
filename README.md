@@ -12,6 +12,7 @@ We provide a hierarchy of semidefinite relaxations based on Putinar-Valilescu's 
 InterRelax has been implemented on a desktop compute with the following softwares:
 - Ubuntu 18.04.4
 - Julia 1.3.1
+- [Mosek 9.1](https://www.mosek.com)
 
 Before installing InterRelax, you should install [TSSOS](https://github.com/wangjie212/TSSOS) and [PolyPowerModels](https://github.com/tweisser/PolyPowerModels) with the following commands:
 ```ruby
