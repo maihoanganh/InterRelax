@@ -78,13 +78,14 @@ data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path
 
 InterRelax.test()
 InterRelax.test_AMGM() #Table 1
-InterRelax.test_dense_POP_arbcons(data) #Tables 3 and 11
-InterRelax.test_CS_POP_arbcons(data) #Tables 4 and 12
+InterRelax.test_dense_POP_arbcons(data) #Tables 3 and 12
+InterRelax.test_CS_POP_arbcons(data) #Tables 4 and 13
 InterRelax.test_PMSV(data) #Table 5
 InterRelax.test_compute_stability_number_of_graph_random(data) #Table 6
 InterRelax.test_compute_stability_number_of_graph(data) #Table 7
 InterRelax.test_deciding_copositivity(data) #Table 8
 InterRelax.test_deciding_nonegativity(data) #Table 9
 InterRelax.test_dense_POP_binary_constr_random(data) #Table 10
+InterRelax.test_CertifyNN(data) #Table 11
 
 ```

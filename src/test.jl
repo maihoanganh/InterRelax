@@ -953,3 +953,119 @@ function test_dense_POP_binary_constr_random(data)
     end
     
 end
+
+
+
+
+
+
+function test_CertifyNN(data)
+    n=1000
+    Pb=0
+    Id=0
+    d=Int64(0)
+    k=1
+    s=1
+    
+    
+    test_x, test_y = MNIST.testdata();
+    vars = matread(data*"/deq_MNIST_SingleFcNet_m=20.mat");
+    A = vars["A"]; B = vars["B"]; U = vars["U"]; u = vars["u"]; C = vars["C"];
+    p = size(U, 1); m = 20; W = (1-m)*Matrix(I(p))-A'*A+B-B';
+
+    U=U[:,1:p]
+
+    me = 0.1307; std = 0.3081; eps = 0.1/std;
+    k = 1; x0 = (vec(test_x[:,:,k]).-me)./std; 
+
+
+    p0=size(U, 2)
+    @polyvar x_bar[1:p0] z[1:p]# variables
+    n=p0+p
+    x=[x_bar;z]
+
+    f=-C[1,:]'*z
+
+    g=Vector{Polynomial{true,Float64}}([])
+    h=Vector{Polynomial{true,Float64}}([])
+
+    pol=1.0*z[1]
+
+    for j in 1:p
+        pol=z[j]-sum(U[j,r]*(x_bar[r]+x0[r]-eps) for r=1:p0)-u[j]
+        append!(g,[pol])
+        append!(h,[z[j]*pol])
+    end
+
+    for t in 1:p0
+        append!(g,[2*eps-x_bar[t]])
+    end
+
+    
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+    
+    
+    for i in [1;2;3]
+        
+        f=-C[i,:]'*z
+        
+        n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+
+        println("Ordinal number of POP: i=",i)
+
+        println("***Problem setting***")
+        println("Number of variables: n=",n)
+        println("Number of inequality constraints: m=",m+1)
+        println("Number of equality constraints: l=",l)
+        println()
+        println("-------------------------------")
+        println()
+
+        for k_Pu in [1;2]
+            Id+=1
+            println("Ordinal number of SDP: Id=",Id)
+            println()
+            println("-------------------------------")
+            println()
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+            k=k_Pu
+            println("Maximal matrix size: ",binomial(88+k,k))
+            TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+
+            println()
+            println("-------------------------------")
+            println()
+
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+            
+            k=0
+
+            if k_Pu==1
+                s=20
+            else
+                s=90
+            end
+
+
+            d=Int64(maximum([sum(supp_f[:,i]) for i in 1:lmon_f]))+1
+
+
+
+
+            @time RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
+
+
+
+
+
+            println()
+            println("-------------------------------")
+            println("-------------------------------")
+            println()
+        end
+    end
+    
+end
+

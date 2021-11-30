@@ -6,6 +6,7 @@ using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, SumOfSq
 
 using TSSOS
 
+using MAT, MLDatasets
 
 #using SDPNAL
 
