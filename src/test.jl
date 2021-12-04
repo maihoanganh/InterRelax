@@ -577,7 +577,7 @@ function test_compute_stability_number_of_graph(data)
                 
     
     
-    for n1 in 1:5
+    for n1 in 1:6
                                                                     
                                                                     
         if n1==1
@@ -592,9 +592,12 @@ function test_compute_stability_number_of_graph(data)
         elseif n1==4
             A = MatrixMarket.mmread(data*"/hamming6-2.mtx")
             Pb="hamming6-2"
-        else
+        elseif n1==5
             A = MatrixMarket.mmread(data*"/hamming6-4.mtx")
             Pb="hamming6-4"
+        else
+            A = MatrixMarket.mmread(data*"/johnson16-2-4.mtx")
+            Pb="johnson16-2-4"
         end
                                                                     
         n=size(A,1)
@@ -659,8 +662,12 @@ function test_compute_stability_number_of_graph(data)
                 s=66
             elseif Id==9
                 s=40
-            else
+            elseif Id==10
                 s=60
+            elseif Id==11
+                s=100
+            else
+                s=122
             end
 
 
