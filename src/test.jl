@@ -17,6 +17,7 @@ function test()
     println()
     println("-------------------------------")
     println()
+    println("Dense case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
     k=2
     
@@ -24,6 +25,7 @@ function test()
     println()
     println("-------------------------------")
     println()
+    println("Dense case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
     k=1 # relaxation order
     s=3 # sparsity order
@@ -31,6 +33,7 @@ function test()
     println()
     println("-------------------------------")
     println()
+    println("Dense case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
     k=2
     @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
@@ -38,12 +41,14 @@ function test()
     println()
     println("-------------------------------")
     println()
+    println("Sparse case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
     k=2
     TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
     println()
     println("-------------------------------")
     println()
+    println("Sparse case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
     k=1 # relaxation order
     s=3 # sparsity order
@@ -52,6 +57,7 @@ function test()
     println()
     println("-------------------------------")
     println()
+    println("Sparse case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
     k=2
     @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false);
@@ -75,7 +81,7 @@ function test_AMGM()
 
     f=sum(x)+0.0
 
-    g=[prod(x)-1.0;3.0-sum(x)]
+    g=[prod(x)-1.0]
 
     m=length(g)
     println("Number of inequality constraints: m=",m)
@@ -398,7 +404,7 @@ function test_PMSV(data)
             k=k_Pu
             opt_val=TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
                                     
-            println("Approximate positive maximal singular value: sigma=",-opt_val)
+            println("Approximate positive maximal singular value: sigma^2=",-opt_val)
 
 
             println()
@@ -432,7 +438,7 @@ function test_PMSV(data)
 
             @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-            println("Approximate positive maximal singular value: sigma=",-opt_val)
+            println("Approximate positive maximal singular value: sigma^2=",-opt_val)
 
 
             println()
