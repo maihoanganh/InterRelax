@@ -6,7 +6,9 @@ using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, SumOfSq
 
 using TSSOS
 
-using MAT, MLDatasets
+using MAT#, MLDatasets
+
+using DataStructures, Match
 
 #using SDPNAL
 
@@ -37,6 +39,8 @@ include("./save_data.jl")
 include("./pop_dense_SOS.jl")
 include("./pop_opf.jl")
 include("./test.jl")
+include("./readtsp.jl")
+
 
 end
 

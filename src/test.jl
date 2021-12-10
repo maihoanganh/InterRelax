@@ -685,6 +685,137 @@ function test_compute_stability_number_of_graph(data)
     end
     
 end
+      
+                                                                        
+function test_compute_stability_number_of_graph_ball_constr(data)
+    
+    Pb="GD02_a"
+    Id=0
+    k=0
+    s=1
+
+    A = MatrixMarket.mmread(data*"/GD02_a.mtx")
+
+    n=size(A,1)
+    for i in 1:n
+        A[i,i]=1
+    end
+                                                    
+    @polyvar x[1:n]
+    f=sum(A[i,j]*x[i]*x[j] for i=1:n for j=1:n)*1.0
+    g=[1.0-sum(x.^2)];m=length(g)
+    h=[1.0-sum(x)];l=length(h)
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+    opt_val=1.0
+                
+    
+    
+    for n1 in 1:6
+        if n1==1
+            A = MatrixMarket.mmread(data*"/GD02_a.mtx")
+            Pb="GD02_a"
+        elseif n1==2
+            A = MatrixMarket.mmread(data*"/johnson8-2-4.mtx")
+            Pb="johnson8-2-4"
+        elseif n1==3
+            A = MatrixMarket.mmread(data*"/johnson8-4-4.mtx")
+            Pb="johnson8-4-4"
+        elseif n1==4
+            A = MatrixMarket.mmread(data*"/hamming6-2.mtx")
+            Pb="hamming6-2"
+        elseif n1==5
+            A = MatrixMarket.mmread(data*"/hamming6-4.mtx")
+            Pb="hamming6-4"
+        else
+            A = MatrixMarket.mmread(data*"/johnson16-2-4.mtx")
+            Pb="johnson16-2-4"
+        end
+                                                                    
+        n=size(A,1)
+        for i in 1:n
+            A[i,i]=1
+        end                                                            
+
+        
+        println("Ordinal number of POP: Pb=",Pb)    
+                                                                        
+        @polyvar x[1:n]
+        f=sum(A[i,j]*x[i]*x[j] for i=1:n for j=1:n)*1.0
+        g=Vector{Polynomial{true,Float64}}([]);m=length(g)
+        h=[1.0-sum(x)];l=length(h)
+                                                       
+
+
+        println("***Problem setting***")
+        println("Number of variables: n=",n)
+        println("Number of inequality constraints: m=",m+1)
+        println("Number of equality constraints: l=",l)
+        println()
+        println("-------------------------------")
+        println()
+
+        for k_Pu in [1;2]
+            Id+=1
+            println("Ordinal number of SDP: Id=",Id)
+            println()
+            println("-------------------------------")
+            println()
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+            k=k_Pu
+            opt_val=TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+            println("Approximate stability number: alpha=",1/opt_val)
+
+
+            println()
+            println("-------------------------------")
+            println()
+
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+            k=0
+                                                            
+            if Id==1
+                s=13
+            elseif Id==2
+                s=25
+            elseif Id==3
+                s=23
+            elseif Id==4
+                s=30
+            elseif Id==5
+                s=70
+            elseif Id==6
+                s=71
+            elseif Id==7
+                s=64
+            elseif Id==8
+                s=66
+            elseif Id==9
+                s=64
+            elseif Id==10
+                s=60
+            elseif Id==11
+                s=40
+            else
+                s=122
+            end
+
+
+
+            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
+
+            println("Approximate stability number: alpha=",1/opt_val)
+
+            println()
+            println("-------------------------------")
+            println("-------------------------------")
+            println()
+        end
+    end
+    
+end
                                                                         
                                                                         
                                                                         
@@ -971,3 +1102,377 @@ end
 
 
 
+function test_MAXCUT(data)
+    
+    Pb="burma14"
+    Id=0
+    k=0
+    s=1
+
+    path=data*"/burma14.tsp"
+    W=readTSP(path).weights
+
+    n=size(W,1)
+                                                    
+    @polyvar x[1:n]
+    f=-1.0*sum(W[i,j]*x[i]*(1.0-x[j]) for i=1:n for j=1:n)
+    g=Vector{Polynomial{true,Float64}}();m=length(g)
+    h=[x[j]*(1.0-x[j]) for j=1:n];l=length(h)
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+    opt_val=1.0
+                
+    
+    
+    for n1 in 1:4
+        if n1==1
+            path=data*"/burma14.tsp"
+            W=readTSP(path).weights
+            Pb="burma14"
+        elseif n1==2
+            path=data*"/gr17.tsp"
+            W=readTSP(path).weights
+            Pb="gr17"
+        elseif n1==3
+            path=data*"/fri26.tsp"
+            W=readTSP(path).weights
+            Pb="fri26"
+        else n1==4
+            path=data*"/att48.tsp"
+            W=readTSP(path).weights
+            Pb="att48"
+        end
+                                                                    
+        n=size(W,1)                                                          
+
+        
+        println("Ordinal number of POP: Pb=",Pb)    
+                                                                        
+        @polyvar x[1:n]
+        f=-1.0*sum(W[i,j]*x[i]*(1.0-x[j]) for i=1:n for j=1:n)
+        g=Vector{Polynomial{true,Float64}}();m=length(g)
+        h=[x[j]*(1.0-x[j]) for j=1:n];l=length(h)
+                                                       
+
+
+        println("***Problem setting***")
+        println("Number of variables: n=",n)
+        println("Number of inequality constraints: m=",m+1)
+        println("Number of equality constraints: l=",l)
+        println()
+        println("-------------------------------")
+        println()
+
+        for k_Pu in [1;2]
+            Id+=1
+            println("Ordinal number of SDP: Id=",Id)
+            println()
+            println("-------------------------------")
+            println()
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+            k=k_Pu
+            opt_val=TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+            println("Approximate maximum cut: val=",-opt_val)
+
+
+            println()
+            println("-------------------------------")
+            println()
+
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+            if Id in [1;3;5;7]
+                k=0
+            else
+                k=1
+            end
+                                                            
+            if Id==1
+                s=16
+            elseif Id==2
+                s=16
+            elseif Id==3
+                s=19
+            elseif Id==4
+                s=19
+            elseif Id==5
+                s=28
+            elseif Id==6
+                s=28
+            elseif Id==7
+                s=50
+            else
+                s=50
+            end
+
+
+
+            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
+
+            println("Approximate maximum cut: val=",-opt_val)
+
+            println()
+            println("-------------------------------")
+            println("-------------------------------")
+            println()
+        end
+    end
+    
+end
+                                                                                                                                                
+                                                                                                                                                
+                                                                                                                               
+function test_CertifyNNHousing(data)
+    n=5                                                                                                                    
+    u=1
+    Pb=0
+    Id=0
+    d=Int64(0)
+    k=1
+    s=1
+    opt_val=0.0
+    
+    
+    D = matread(data*"/WeightsHousing.mat");
+    W1 = D["W1"]; W2 = D["W2"]; c = D["c"]; x_bar=D["x_bar"]; y_bar=D["y_bar"]
+    eps = 0.1;
+
+    m1=size(W1,2)
+    m2=size(W2,2)
+    m3=size(W2,1)
+
+
+    @polyvar x1[1:m1] x2[1:m2] x3[1:m3]# variables
+    f=(c[y_bar+1,:]-c[1,:])'*x3
+    g=Vector{Polynomial{true,Float64}}([])
+    h=Vector{Polynomial{true,Float64}}([])
+
+    pol=1.0*x1[1]
+
+    for j in 1:m2
+        pol=x2[j]-sum(W1[j,r]*x1[r] for r=1:m1)
+        append!(g,[pol])
+        append!(h,[x2[j]*pol])
+    end
+    for j in 1:m3
+        pol=x3[j]-sum(W2[j,r]*x2[r] for r=1:m2)
+        append!(g,[pol])
+        append!(h,[x3[j]*pol])
+    end
+
+    for t in 1:m1
+        append!(g,[-x1[t]+x_bar[1,t]+eps])
+    end
+
+    m=length(g)
+    l=length(h)
+
+    f=f([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+
+    for j in 1:m
+        g[j]=g[j]([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+    end
+
+    for j in 1:l
+        h[j]=h[j]([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+    end
+    x=[x1;x2;x3]; n=length(x)
+
+    
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+    
+    
+    for i in [1;3]
+        
+        f=(c[y_bar+1,:]-c[i,:])'*x3
+        f=f([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+        
+
+        println("Ordinal number of POP: y=",i)
+
+        println("***Problem setting***")
+        println("Number of variables: n=",n)
+        println("Number of inequality constraints: m=",m+1)
+        println("Number of equality constraints: l=",l)
+        println()
+        println("-------------------------------")
+        println()
+
+        for k_Pu in [1;2]
+            Id+=1
+            println("Ordinal number of SDP: Id=",Id)
+            println()
+            println("-------------------------------")
+            println()
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+            k=k_Pu
+            if k_Pu==1
+                u=8
+            else
+                u=20
+            end
+            println("Maximal matrix size: ",binomial(u+k,k))
+            opt_val=TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+            println("Upper bound: val=",-opt_val)
+            
+            println()
+            println("-------------------------------")
+            println()
+
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+            
+            if Id in [1;3]
+                k=0
+            else
+                k=1
+            end
+
+            s=22
+
+
+            d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
+
+
+            @time opt_val,_=RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
+
+            println("Upper bound: val=",-opt_val)
+
+            println()
+            println("-------------------------------")
+            println("-------------------------------")
+            println()
+        end
+    end
+    
+end
+
+                                                                                                                                                
+                                                                                                                               
+                                                                                                                               
+                                                                                                                                function test_CertifyNNDigits(data)
+    n=5                                                                                                                    
+    u=1
+    Pb=0
+    Id=0
+    d=Int64(0)
+    k=1
+    s=1
+    opt_val=0.0
+    
+    
+    D = matread(data*"/WeightsDigits2.mat");
+    W1 = D["W1"]; W2 = D["W2"]; c = D["c"]; x_bar=D["x_bar"]; y_bar=D["y_bar"]
+    eps = 0.1;
+
+    m1=size(W1,2)
+    m2=size(W2,2)
+    m3=size(W2,1)
+
+
+    @polyvar x1[1:m1] x2[1:m2] x3[1:m3]# variables
+    f=(c[y_bar+1,:]-c[1,:])'*x3
+    g=Vector{Polynomial{true,Float64}}([])
+    h=Vector{Polynomial{true,Float64}}([])
+
+    pol=1.0*x1[1]
+
+    for j in 1:m2
+        pol=x2[j]-sum(W1[j,r]*x1[r] for r=1:m1)
+        append!(g,[pol])
+        append!(h,[x2[j]*pol])
+    end
+    for j in 1:m3
+        pol=x3[j]-sum(W2[j,r]*x2[r] for r=1:m2)
+        append!(g,[pol])
+        append!(h,[x3[j]*pol])
+    end
+
+    for t in 1:m1
+        append!(g,[-x1[t]+x_bar[1,t]+eps])
+    end
+
+    m=length(g)
+    l=length(h)
+
+    f=f([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+
+    for j in 1:m
+        g[j]=g[j]([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+    end
+
+    for j in 1:l
+        h[j]=h[j]([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+    end
+    x=[x1;x2;x3]; n=length(x)
+
+    
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+    
+    
+    for i in [1;2;3;4;5;6;7;8;10]
+        
+        f=(c[y_bar+1,:]-c[i,:])'*x3
+        f=f([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
+        
+
+        println("Ordinal number of POP: y=",i)
+
+        println("***Problem setting***")
+        println("Number of variables: n=",n)
+        println("Number of inequality constraints: m=",m+1)
+        println("Number of equality constraints: l=",l)
+        println()
+        println("-------------------------------")
+        println()
+
+        for k_Pu in [1;2]
+            Id+=1
+            println("Ordinal number of SDP: Id=",Id)
+            println()
+            println("-------------------------------")
+            println()
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+            k=k_Pu
+            if k_Pu==1
+                u=11
+            else
+                u=74
+            end
+            println("Maximal matrix size: ",binomial(u+k,k))
+            opt_val=TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+            println("Upper bound: val=",-opt_val)
+            
+            println()
+            println("-------------------------------")
+            println()
+
+
+            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+            
+            k=0
+            if k_Pu==1
+                s=50
+            else
+                s=76
+            end
+
+
+            d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
+
+
+            @time opt_val,_=RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
+
+            println("Upper bound: val=",-opt_val)
+
+            println()
+            println("-------------------------------")
+            println("-------------------------------")
+            println()
+        end
+    end
+    
+end
