@@ -92,8 +92,6 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
     #####
 
     for t=1:p
-        
-        
         v[t]=get_basis(lI[t],d)
         
         sk[t]=binomial(d+lI[t],lI[t])
@@ -288,6 +286,4 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
 
     return opt_val,opt_sol
 
-end        
-            
-        
+end
