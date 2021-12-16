@@ -4,6 +4,8 @@ module InterRelax
 
 using DynamicPolynomials, LinearAlgebra, MosekTools, SparseArrays, JuMP, SumOfSquares, LightGraphs, COSMO, PowerModels, Ipopt, RowEchelon, MatrixMarket, PolyPowerModels
 
+#using Simplex, GLPK
+
 using TSSOS
 
 using MAT#, MLDatasets

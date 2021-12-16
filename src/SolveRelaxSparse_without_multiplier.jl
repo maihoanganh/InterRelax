@@ -62,6 +62,10 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
         model=Model(SDPNAL.Optimizer)
     elseif solver=="COSMO"
         model=Model(COSMO.Optimizer)
+    elseif solver=="Simplex"
+        model=Model(Simplex.Optimizer)
+    elseif solver=="GLPK"
+        model=Model(GLPK.Optimizer)    
     else
         error("No SDP solver!!!")
     end
