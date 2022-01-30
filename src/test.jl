@@ -203,23 +203,24 @@ function test_dense_POP_arbcons(data)
                     k=3
                 end
                 
-                if Id in [1;3;5;7;9;11]
+                if Id in [1;3;4;5;7;9;11]
                     s=1
                 elseif Id==2
-                    s=17
-                elseif Id in [4;8]
-                    s=20
+                    s=5
+                elseif Id==8
+                    s=10
                 elseif Id==6
-                    s=22
+                    s=7
                 elseif Id==10
-                    s=32
+                    s=20
                 else
-                    s=31
+                    s=15
                 end
+                
 
 
-                @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek")
+
+                @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
 
                 println()
                 println("-------------------------------")
@@ -325,20 +326,21 @@ function test_CS_POP_arbcons(data)
                 if Id in [1;3;5]
                     s=1
                 elseif Id==2
+                    s=7
+                elseif Id==4
                     s=10
-                elseif Id in [4;6]
+                elseif Id==6
                     s=15
                 elseif Id==7
                     s=2
                 else
-                    s=22
+                    s=20
                 end
 
 
                 
 
-
-                @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false);
+                @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,L,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=ones(Float64,150))
 
                 println()
                 println("-------------------------------")

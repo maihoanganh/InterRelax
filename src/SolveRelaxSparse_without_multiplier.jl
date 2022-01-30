@@ -1,14 +1,14 @@
-function RelaxSparse_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,k::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=k,comp_opt_sol=false)
+function RelaxSparse_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,k::Int64;L=ones(Float64,150),assign="min",alg="MD",minimize=true,solver="Mosek",order=k,comp_opt_sol=false)
     
     println("**Interrupted relaxation based on Handelman's Positivstellensatz**")
     println("Relaxation order: k=",k)
     println("Sparsity order: s=",s)
     
-   return RelaxSparse_without_multiplier1(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
+   return RelaxSparse_without_multiplier1(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,L=L,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
 end
 
 
-function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,d::Int64;assign="min",alg="MD",minimize=true,solver="Mosek",order=d,comp_opt_sol=false)
+function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{SparseMatrixCSC{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{SparseMatrixCSC{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::SparseMatrixCSC{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},s::Int64,k::Int64;L=ones(Float64,150),assign="min",alg="MD",minimize=true,solver="Mosek",order=k,comp_opt_sol=false)
     
     
     I,p,lI=clique_decomp(n,m+l,[dg;dh],[[supp_f];supp_g;supp_h],order=order,alg=alg,minimize=minimize) 
@@ -29,9 +29,6 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
         J[t]=[J[t];m]
         lJ[t]+=1
     end
-    
-    
-    
     
     
     println("  Number of cliques: p=", p)
@@ -71,24 +68,35 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
     end
     
     
+    lmon_bcons_power=Vector{Vector{Int64}}(undef,p)
+    supp_bcons_power=Vector{Vector{Matrix{UInt64}}}(undef,p)
+    coe_bcons_power=Vector{Vector{Vector{Float64}}}(undef,p)
+    
+    lmon_bcons=Vector{Int64}(undef,p)
+    supp_bcons=Vector{Matrix{UInt64}}(undef,p)
+    coe_bcons=Vector{Vector{Float64}}(undef,p)
+    Imat=Vector{Matrix{UInt64}}(undef,p)
+    
     
     sk=Vector{UInt64}(undef,p)
-    sk_g=Vector{Vector{UInt64}}(undef,p)
+    sk_g=Vector{Vector{Vector{UInt64}}}(undef,p)
     sk_h=Vector{Vector{UInt64}}(undef,p)
+    
+    
     
     r=1
     q=1
     maxsize=0
     
-    block_G=Vector{Vector{Vector{Vector{Int64}}}}(undef,p)
-    len_block_G=Vector{Vector{Vector{Int64}}}(undef,p)
+    block_G=Vector{Vector{Vector{Vector{Vector{Int64}}}}}(undef,p)
+    len_block_G=Vector{Vector{Vector{Vector{Int64}}}}(undef,p)
     
 
     
     t_iter=1
     
 
-    G=Vector{Vector{Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}}}(undef, p)
+    G=Vector{Vector{Vector{Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}}}}(undef, p)
     H=Vector{Vector{Vector{VariableRef}}}(undef, p)
     
 
@@ -96,20 +104,44 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
     #####
 
     for t=1:p
-        v[t]=get_basis(lI[t],d)
         
-        sk[t]=binomial(d+lI[t],lI[t])
+        lmon_bcons_power[t]=Vector{Int64}(undef,k+1)
+        supp_bcons_power[t]=Vector{Matrix{UInt64}}(undef,k+1)
+        coe_bcons_power[t]=Vector{Vector{Float64}}(undef,k+1)
+        
+        lmon_bcons_power[t][1]=Int64(1)
+        supp_bcons_power[t][1]=zeros(UInt64,n,1)
+        coe_bcons_power[t][1]=ones(Float64,1)
 
-        sk_g[t]=Vector{UInt64}(undef,lJ[t])
+        lmon_bcons[t]=lI[t]+1
+        Imat[t]=spzeros(UInt64,n,lI[t])
+        for i in 1:lI[t]
+            Imat[t][I[t][i],i]=1
+        end
+        supp_bcons[t]=[spzeros(UInt64,n,1) 2*Imat[t]]
+        coe_bcons[t]=[L[t];-ones(Float64,n)]
+        
+        for i in 1:k
+            lmon_bcons_power[t][i+1],supp_bcons_power[t][i+1],coe_bcons_power[t][i+1]=mulpoly(n,lmon_bcons_power[t][i],supp_bcons_power[t][i],coe_bcons_power[t][i],lmon_bcons[t],supp_bcons[t],coe_bcons[t])
+        end
+        
+        
+        v[t]=get_basis(lI[t],k)
+        
+        sk[t]=binomial(k+lI[t],lI[t])
+
+        sk_g[t]=Vector{Vector{UInt64}}(undef,lJ[t])
         sk_h[t]=Vector{UInt64}(undef,lW[t])
-
-
-        @fastmath @inbounds @simd for i in 1:lJ[t]
-            sk_g[t][i]=binomial(d-dg[J[t][i]]+lI[t],lI[t])
+        
+        for i in 1:lJ[t]
+            sk_g[t][i]=Vector{UInt64}(undef,k-dg[J[t][i]]+1)
+            for r in 0:k-dg[J[t][i]]
+                sk_g[t][i][r+1]=binomial(k-dg[J[t][i]]-r+lI[t],lI[t])
+            end
         end
 
         @fastmath @inbounds @simd for i in 1:lW[t]
-            sk_h[t][i]=binomial(d-dh[W[t][i]]+lI[t],lI[t])
+            sk_h[t][i]=binomial(k-dh[W[t][i]]+lI[t],lI[t])
         end
         
     end
@@ -142,37 +174,42 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
         r=1
         q=1
 
-        block_G[t]=Vector{Vector{Vector{Int64}}}(undef,lJ[t])
-        len_block_G[t]=Vector{Vector{Int64}}(undef,lJ[t])
+        block_G[t]=Vector{Vector{Vector{Vector{Int64}}}}(undef,lJ[t])
+        len_block_G[t]=Vector{Vector{Vector{Int64}}}(undef,lJ[t])
         for i in 1:lJ[t]
-            block_G[t][i]=Vector{Vector{Int64}}(undef,sk_g[t][i])
-            len_block_G[t][i]=Vector{Int64}(undef,sk_g[t][i])
-            for j in 1:sk_g[t][i]
-                block_G[t][i][j]=[]
-                len_block_G[t][i][j]=0
-                r=j
-                while len_block_G[t][i][j] <= s-1 && r <= sk_g[t][i]
-                    if norm(vmod[t][:,j]-vmod[t][:,r],1)==0
-                        append!(block_G[t][i][j],r)
-                        len_block_G[t][i][j]+=1
+            block_G[t][i]=Vector{Vector{Vector{Int64}}}(undef,k-dg[J[t][i]]+1)
+            len_block_G[t][i]=Vector{Vector{Int64}}(undef,k-dg[J[t][i]]+1)
+            for c in 0:k-dg[J[t][i]]
+                block_G[t][i][c+1]=Vector{Vector{Int64}}(undef,sk_g[t][i][c+1])
+                len_block_G[t][i][c+1]=Vector{Int64}(undef,sk_g[t][i][c+1])
+                for j in 1:sk_g[t][i][c+1]
+                    block_G[t][i][c+1][j]=[]
+                    len_block_G[t][i][c+1][j]=0
+                    r=j
+
+                    while len_block_G[t][i][c+1][j] <= s-1 && r <= sk_g[t][i][c+1]
+                        #if all(el->iseven(el)==true, v[:,j]+v[:,r])#
+                        if norm(vmod[t][:,j]-vmod[t][:,r],1)==0
+                            append!(block_G[t][i][c+1][j],r)
+                            len_block_G[t][i][c+1][j]+=1
+                        end
+                        r+=1
                     end
-                    r+=1
-                end
 
-                q=1
-                while !issubset(block_G[t][i][j],block_G[t][i][q]) && q<=j-1
-                    q+=1
-                end
+                    q=1
+                    while !issubset(block_G[t][i][c+1][j],block_G[t][i][c+1][q]) && q<=j-1
+                        q+=1
+                    end
 
-                if q<j
-                    block_G[t][i][j]=[]
-                    len_block_G[t][i][j]=0
+                    if q<j
+                        block_G[t][i][c+1][j]=[]
+                        len_block_G[t][i][c+1][j]=0
+                    end
+                    #println(block_G[t][i][j])
+                    if maxsize<len_block_G[t][i][c+1][j]
+                        maxsize=len_block_G[t][i][c+1][j]
+                    end
                 end
-                #println(block_G[i][j])
-                if maxsize<len_block_G[t][i][j]
-                    maxsize=len_block_G[t][i][j]
-                end
-                #println(maxsize)
             end
         end
     
@@ -181,37 +218,42 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
  
         
 
-        G[t]=Vector{Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}}(undef, lJ[t])
+        G[t]=Vector{Vector{Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}}}(undef, lJ[t])
         H[t]=Vector{Vector{VariableRef}}(undef, lW[t])
 
 
 
         for i=1:lJ[t]
-            G[t][i]=Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}(undef, sk_g[t][i])
-            for j in 1:sk_g[t][i]
-
-
-                if len_block_G[t][i][j]>=1
-                    if len_block_G[t][i][j]==1
-                        G[t][i][j]=@variable(model, lower_bound=0)
-                        for z=1:lmon_g[J[t][i]]
-                            vec=spzeros(UInt64,n)
-                            vec[I[t]]=supp_g[J[t][i]][I[t],z]+2*v[t][:,block_G[t][i][j]]
-                            @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,vec,n)],-coe_g[J[t][i]][z]*G[t][i][j])
-                        end
-                    else 
-                        G[t][i][j]=@variable(model,[1:len_block_G[t][i][j],1:len_block_G[t][i][j]],PSD)
-                        for p in 1:len_block_G[t][i][j]
-                            for q in p:len_block_G[t][i][j]
-                                for z in 1:lmon_g[J[t][i]]
-                                    if p==q
-                                        vec=spzeros(UInt64,n)
-                                        vec[I[t]]=v[t][:,block_G[t][i][j][p]]+v[t][:,block_G[t][i][j][q]]+supp_g[J[t][i]][I[t],z]
-                                        @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,vec,n)],-coe_g[J[t][i]][z]*G[t][i][j][p,q])
-                                    else
-                                        vec=spzeros(UInt64,n)
-                                        vec[I[t]]=v[t][:,block_G[t][i][j][p]]+v[t][:,block_G[t][i][j][q]]+supp_g[J[t][i]][I[t],z]
-                                        @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,vec,n)],-2*coe_g[J[t][i]][z]*G[t][i][j][p,q])
+            G[t][i]=Vector{Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}}(undef,k-dg[J[t][i]]+1)
+            for c in 0:k-dg[J[t][i]]
+                G[t][i][c+1]=Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}(undef, sk_g[t][i][c+1])
+                for j in 1:sk_g[t][i][c+1]
+                    if len_block_G[t][i][c+1][j]>=1
+                        if len_block_G[t][i][c+1][j]==1
+                            G[t][i][c+1][j]=@variable(model, lower_bound=0)
+                            for z=1:lmon_g[J[t][i]]
+                                for a=1:lmon_bcons_power[t][c+1]
+                                    vec=spzeros(UInt64,n)
+                                    vec[I[t]]=supp_g[J[t][i]][I[t],z]+2*v[t][:,block_G[t][i][c+1][j]]+supp_bcons_power[t][c+1][I[t],a]
+                                    @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,vec,n)],-coe_g[J[t][i]][z]*G[t][i][c+1][j]*coe_bcons_power[t][c+1][a])
+                                end
+                            end
+                        else 
+                            G[t][i][c+1][j]=@variable(model,[1:len_block_G[t][i][c+1][j],1:len_block_G[t][i][c+1][j]],PSD)
+                            for p in 1:len_block_G[t][i][c+1][j]
+                                for q in p:len_block_G[t][i][c+1][j]
+                                    for z in 1:lmon_g[J[t][i]]
+                                        for a=1:lmon_bcons_power[t][c+1]
+                                            if p==q
+                                                vec=spzeros(UInt64,n)
+                                                vec[I[t]]=v[t][:,block_G[t][i][c+1][j][p]]+v[t][:,block_G[t][i][c+1][j][q]]+supp_g[J[t][i]][I[t],z]+supp_bcons_power[t][c+1][I[t],a]
+                                                @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,vec,n)],-coe_g[J[t][i]][z]*G[t][i][c+1][j][p,q]*coe_bcons_power[t][c+1][a])
+                                            else
+                                                vec=spzeros(UInt64,n)
+                                                vec[I[t]]=v[t][:,block_G[t][i][c+1][j][p]]+v[t][:,block_G[t][i][c+1][j][q]]+supp_g[J[t][i]][I[t],z]+supp_bcons_power[t][c+1][I[t],a]
+                                                @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,vec,n)],-2*coe_g[J[t][i]][z]*G[t][i][c+1][j][p,q]*coe_bcons_power[t][c+1][a])
+                                            end
+                                        end
                                     end
                                 end
                             end
@@ -263,30 +305,7 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
     println("Optimal value = ",opt_val)
     
     opt_sol=[Vector{Float64}([]) for t in 1:p]
-    if comp_opt_sol
-        
-        Gr=Vector{Matrix{Float64}}(undef,p)
-        for t in 1:p
-            println("---------------")
-            println("Clique $(t):")
-
-            Gr[t]=zeros(Float64,sk_g[t][lJ[t]],sk_g[t][lJ[t]])
-
-            for j in 1:sk_g[t][lJ[t]]
-                if len_block_G[t][lJ[t]][j]>1
-                    Gr[t][block_G[t][lJ[t]][j],block_G[t][lJ[t]][j]]+=value.(G[t][lJ[t]][j])
-                elseif len_block_G[t][lJ[t]][j]==1
-                    Gr[t][block_G[t][lJ[t]][j],block_G[t][lJ[t]][j]]+=[value.(G[t][lJ[t]][j])]
-                end
-
-            end
-
-
-            opt_sol[t]=extract_optimizer_clique(Gr[t],sk_g[t][lJ[t]],v[t][:,1:sk_g[t][lJ[t]]],lI[t],lJ[t],lW[t],lmon_g[J[t]],supp_g[J[t]],coe_g[J[t]],lmon_h[W[t]],supp_h[W[t]],coe_h[W[t]])
-            println("---------------")
-        end
-        
-    end
+    
 
     return opt_val,opt_sol
 

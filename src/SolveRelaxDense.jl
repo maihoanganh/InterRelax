@@ -24,10 +24,11 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     coe_thetak=ones(Float64,1)
     
     supp_theta=2*[spzeros(UInt64,n,1) sparse(I,n,n)]
+    coe_theta=ones(Float64,n+1)
     
     
     for i in 1:k
-        lmon_thetak,supp_thetak,coe_thetak=mulpoly(n,lmon_thetak,supp_thetak,coe_thetak,n+1,supp_theta,ones(Float64,n+1))
+        lmon_thetak,supp_thetak,coe_thetak=mulpoly(n,lmon_thetak,supp_thetak,coe_thetak,n+1,supp_theta,coe_theta)
     end
     
     
