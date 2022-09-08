@@ -4,7 +4,7 @@ function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector
     println("**Interrupted relaxation based on Handelman's Positivstellensatz**")
     
     println("Relaxation order: k=",k)
-    println("Sparsity order: s=",s)
+    println("Factor width upper bound: s=",s)
     
     m+=1
     

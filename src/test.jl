@@ -1446,55 +1446,57 @@ function test_CertifyNNHousing(data)
             println()
             println("-------------------------------")
             println()
-
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
             
-            if Id in [1;3]
-                k=0
-            else
-                k=1
-            end
-
-            s=35
-
-
-            d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
-
             if k_Pu==2
+
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+
+                if Id in [1;3]
+                    k=0
+                else
+                    k=1
+                end
+
+                s=35
+
+
+                d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
+
+            
 
                 @time opt_val,_=RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
 
-            end
-            println("Upper bound: val=",-opt_val)
             
-            println()
-            println("-------------------------------")
-            println()
+                println("Upper bound: val=",-opt_val)
+
+                println()
+                println("-------------------------------")
+                println()
 
 
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
+
+                if Id in [1;3]
+                    k=2
+                else
+                    k=3
+                end
+
+                s=35
+
+
+                L=100*ones(Float64,100)
             
-            if Id in [1;3]
-                k=2
-            else
-                k=3
-            end
-
-            s=35
-
-
-            L=100*ones(Float64,100)
-            if k_Pu==2
 
                 @time opt_val,_=RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=L);
-            end
-            println("Upper bound: val=",-opt_val)
+            
+                println("Upper bound: val=",-opt_val)
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+            end
         end
     end
     

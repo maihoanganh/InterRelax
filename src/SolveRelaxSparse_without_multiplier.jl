@@ -2,7 +2,7 @@ function RelaxSparse_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vecto
     
     println("**Interrupted relaxation based on Handelman's Positivstellensatz**")
     println("Relaxation order: k=",k)
-    println("Sparsity order: s=",s)
+    println("Factor width upper bound: s=",s)
     
    return RelaxSparse_without_multiplier1(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,L=L,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
 end

@@ -3,7 +3,7 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     
     println("**Interrupted relaxation based on Polya's Positivstellensatz**")
     println("Relaxation order: k=",k)
-    println("Sparsity order: s=",s)
+    println("Factor width upper bound: s=",s)
     
     m+=1
     
