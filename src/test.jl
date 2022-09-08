@@ -186,9 +186,12 @@ function test_dense_POP_arbcons(data)
                     comp_opt_sol=false
                 end
                 
+                if k_Pu==2
+                
 
-                @time RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                    @time RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=comp_opt_sol)
+                end
 
                 println()
                 println("-------------------------------")
@@ -219,9 +222,9 @@ function test_dense_POP_arbcons(data)
                 
 
 
-
-                @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-
+                if k_Pu==2
+                    @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
+                end
                 println()
                 println("-------------------------------")
                 println("-------------------------------")
@@ -307,9 +310,9 @@ function test_CS_POP_arbcons(data)
                 
                 
                 
-
-                @time RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
-
+                if k_Pu==2
+                    @time RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
+                end
                 println()
                 println("-------------------------------")
                 println()
@@ -338,10 +341,10 @@ function test_CS_POP_arbcons(data)
                 end
 
 
-                
+                if k_Pu==2
 
-                @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,L,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=ones(Float64,150))
-
+                    @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,L,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=ones(Float64,150))
+                end
                 println()
                 println("-------------------------------")
                 println("-------------------------------")
@@ -435,13 +438,13 @@ function test_PMSV(data)
             else
                 s=50
             end
+            if k_Pu==2
 
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
             println("Approximate positive maximal singular value: sigma^2=",-opt_val)
-
+            end
 
             println()
             println("-------------------------------")
@@ -537,11 +540,11 @@ function test_compute_stability_number_of_graph_random(data)
                 s=26
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-
+            end
             println("Approximate stability number: alpha=",1/opt_val)
 
             println()
@@ -672,11 +675,11 @@ function test_compute_stability_number_of_graph(data)
                 s=122
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-
+            end
             println("Approximate stability number: alpha=",1/opt_val)
                                                                                     
             println()
@@ -713,11 +716,11 @@ function test_compute_stability_number_of_graph(data)
                 s=122
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-
+            end
             println("Approximate stability number: alpha=",1/opt_val)                                                                        
 
             println()
@@ -844,11 +847,11 @@ function test_compute_stability_number_of_graph_ball_constr(data)
                 s=122
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-
+            end
             println("Approximate stability number: alpha=",1/opt_val)
                                                                                                             
                                                                                                             
@@ -886,11 +889,11 @@ function test_compute_stability_number_of_graph_ball_constr(data)
                 s=121
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-
+            end
             println("Approximate stability number: alpha=",1/opt_val)                                                                                                
 
             println()
@@ -982,10 +985,10 @@ function test_deciding_copositivity(data)
             end
 
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+            if k_Pu==2
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=true)
-
+            end
 
             println()
             println("-------------------------------")
@@ -1074,11 +1077,11 @@ function test_deciding_nonegativity(data)
                 s=44
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=true)
-
+            end
 
             println()
             println("-------------------------------")
@@ -1168,12 +1171,12 @@ function test_dense_POP_binary_constr_random(data)
                 s=31
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
 
-
+            end
             println()
             println("-------------------------------")
             println("-------------------------------")
@@ -1290,11 +1293,11 @@ function test_MAXCUT(data)
                 s=50
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-
+            end
             println("Approximate maximum cut: val=",-opt_val)
             
             
@@ -1328,11 +1331,11 @@ function test_MAXCUT(data)
                 s=50
             end
 
+            if k_Pu==2
 
-
-            @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",L=n);
-
+            end
             println("Approximate maximum cut: val=",-opt_val)
 
             println()
