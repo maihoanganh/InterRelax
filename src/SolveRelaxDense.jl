@@ -1,7 +1,7 @@
 
 function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Vector{Matrix{UInt64}},coe_g::Vector{Vector{Float64}},lmon_h::Vector{UInt64},supp_h::Vector{Matrix{UInt64}},coe_h::Vector{Vector{Float64}},lmon_f::Int64,supp_f::Matrix{UInt64},coe_f::Vector{Float64},dg::Vector{Int64},dh::Vector{Int64},k::Int64,s::Int64;solver="Mosek",comp_opt_sol=false)
     
-    println("**Interrupted relaxation based on Putinar-Vasilescu's Positivstellensatz**")
+    println("**Interrupted relaxation based on Polya's Positivstellensatz**")
     println("Relaxation order: k=",k)
     println("Sparsity order: s=",s)
     
