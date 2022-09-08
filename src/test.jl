@@ -159,76 +159,73 @@ function test_dense_POP_arbcons(data)
                 println("-------------------------------")
                 println()
 
-                
-                include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
-
-                if Id in [1;2;3;5;7;8;9;10]
-                    k=0
-                else
-                    k=1
-                end
-                
-                if Id in [1;3;5;7;9;11]
-                    s=1
-                elseif Id==2
-                    s=17
-                elseif Id in [4;8]
-                    s=20
-                elseif Id==6
-                    s=7
-                else
-                    s=31
-                end
-                
-                if Id in [2;4;8]
-                    comp_opt_sol=true
-                else
-                    comp_opt_sol=false
-                end
-                
                 if k_Pu==2
-                
+                    include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
+
+                    if Id in [1;2;3;5;7;8;9;10]
+                        k=0
+                    else
+                        k=1
+                    end
+
+                    if Id in [1;3;5;7;9;11]
+                        s=1
+                    elseif Id==2
+                        s=17
+                    elseif Id in [4;8]
+                        s=20
+                    elseif Id==6
+                        s=7
+                    else
+                        s=31
+                    end
+
+                    if Id in [2;4;8]
+                        comp_opt_sol=true
+                    else
+                        comp_opt_sol=false
+                    end
 
                     @time RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=comp_opt_sol)
-                end
+                        lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=comp_opt_sol)
+                    
 
-                println()
-                println("-------------------------------")
-                println()
-
-                
-                include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
-                
-                if Id in [1;2;3;5;7;8;9]
-                    k=2
-                else
-                    k=3
-                end
-                
-                if Id in [1;3;4;5;7;9;11]
-                    s=1
-                elseif Id==2
-                    s=5
-                elseif Id==8
-                    s=10
-                elseif Id==6
-                    s=7
-                elseif Id==10
-                    s=20
-                else
-                    s=15
-                end
-                
+                    println()
+                    println("-------------------------------")
+                    println()
 
 
-                if k_Pu==2
+                    include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
+
+                    if Id in [1;2;3;5;7;8;9]
+                        k=2
+                    else
+                        k=3
+                    end
+
+                    if Id in [1;3;4;5;7;9;11]
+                        s=1
+                    elseif Id==2
+                        s=5
+                    elseif Id==8
+                        s=10
+                    elseif Id==6
+                        s=7
+                    elseif Id==10
+                        s=20
+                    else
+                        s=15
+                    end
+
+
+
                     @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
+                    
+                    println()
+                    println("-------------------------------")
+                    println("-------------------------------")
+                    println()
                 end
-                println()
-                println("-------------------------------")
-                println("-------------------------------")
-                println()
             end
         end
     end
@@ -281,74 +278,74 @@ function test_CS_POP_arbcons(data)
                 println()
                 println("-------------------------------")
                 println()
-
-                
-                include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
-
-                if Id in [1;2;3;5;6;7]
-                    k=0
-                else
-                    k=1
-                end
-                
-                if Id in [1;3;5]
-                    s=1
-                elseif Id==2
-                    s=10
-                elseif Id==4
-                    s=12
-                elseif Id==6
-                    s=15
-                elseif Id==7
-                    s=2
-                else
-                    s=22
-                end
-                
-                
-                d=Int64(maximum([sum(supp_f[:,i]) for i in 1:lmon_f]))
-                
-                
-                
                 if k_Pu==2
+                
+                    include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
+
+                    if Id in [1;2;3;5;6;7]
+                        k=0
+                    else
+                        k=1
+                    end
+
+                    if Id in [1;3;5]
+                        s=1
+                    elseif Id==2
+                        s=10
+                    elseif Id==4
+                        s=12
+                    elseif Id==6
+                        s=15
+                    elseif Id==7
+                        s=2
+                    else
+                        s=22
+                    end
+
+
+                    d=Int64(maximum([sum(supp_f[:,i]) for i in 1:lmon_f]))
+
+
+
                     @time RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
-                end
-                println()
-                println("-------------------------------")
-                println()
-
-                
-                include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
-                
-                if Id in [1;2;3;5;6;7]
-                    k=2
-                else
-                    k=3
-                end
-                
-                if Id in [1;3;5]
-                    s=1
-                elseif Id==2
-                    s=7
-                elseif Id==4
-                    s=10
-                elseif Id==6
-                    s=15
-                elseif Id==7
-                    s=2
-                else
-                    s=20
-                end
+                    
+                    println()
+                    println("-------------------------------")
+                    println()
 
 
-                if k_Pu==2
+                    include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
+
+                    if Id in [1;2;3;5;6;7]
+                        k=2
+                    else
+                        k=3
+                    end
+
+                    if Id in [1;3;5]
+                        s=1
+                    elseif Id==2
+                        s=7
+                    elseif Id==4
+                        s=10
+                    elseif Id==6
+                        s=15
+                    elseif Id==7
+                        s=2
+                    else
+                        s=20
+                    end
+
+
+                    
 
                     @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,L,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=ones(Float64,150))
+                    
+                    println()
+                    println("-------------------------------")
+                    println("-------------------------------")
+                    println()
                 end
-                println()
-                println("-------------------------------")
-                println("-------------------------------")
-                println()
             end
         end
     end
@@ -416,40 +413,38 @@ function test_PMSV(data)
             println("-------------------------------")
             println()
 
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-
-            k=0
-
-            if Id==1
-                s=14
-            elseif Id==2
-                s=17
-            elseif Id==3
-                s=23
-            elseif Id==4
-                s=26
-            elseif Id==5
-                s=35
-            elseif Id==6
-                s=37
-            elseif Id==7
-                s=49
-            else
-                s=50
-            end
             if k_Pu==2
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
 
+                k=0
 
+                if Id==1
+                    s=14
+                elseif Id==2
+                    s=17
+                elseif Id==3
+                    s=23
+                elseif Id==4
+                    s=26
+                elseif Id==5
+                    s=35
+                elseif Id==6
+                    s=37
+                elseif Id==7
+                    s=49
+                else
+                    s=50
+                end
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-            println("Approximate positive maximal singular value: sigma^2=",-opt_val)
-            end
+                    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
+                println("Approximate positive maximal singular value: sigma^2=",-opt_val)
+                
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+            end
         end
     end
     
@@ -514,43 +509,42 @@ function test_compute_stability_number_of_graph_random(data)
             println("-------------------------------")
             println()
 
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            if Id in [1;2;3;4;5;7]
-                k=0
-            else
-                k=1
-            end
-                                                            
-            if Id==1
-                s=6
-            elseif Id==2
-                s=11
-            elseif Id==3
-                s=10
-            elseif Id==4
-                s=16
-            elseif Id==5
-                s=21
-            elseif Id==6
-                s=21
-            elseif Id==7
-                s=26
-            else
-                s=26
-            end
-
             if k_Pu==2
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                if Id in [1;2;3;4;5;7]
+                    k=0
+                else
+                    k=1
+                end
+
+                if Id==1
+                    s=6
+                elseif Id==2
+                    s=11
+                elseif Id==3
+                    s=10
+                elseif Id==4
+                    s=16
+                elseif Id==5
+                    s=21
+                elseif Id==6
+                    s=21
+                elseif Id==7
+                    s=26
+                else
+                    s=26
+                end
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-            end
-            println("Approximate stability number: alpha=",1/opt_val)
+                    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
+           
+                println("Approximate stability number: alpha=",1/opt_val)
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+            end
         end
     end
     
@@ -645,88 +639,87 @@ function test_compute_stability_number_of_graph(data)
             println("-------------------------------")
             println()
 
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=0
-                                                            
-            if Id==1
-                s=12
-            elseif Id==2
-                s=25
-            elseif Id==3
-                s=20
-            elseif Id==4
-                s=30
-            elseif Id==5
-                s=60
-            elseif Id==6
-                s=72
-            elseif Id==7
-                s=40
-            elseif Id==8
-                s=66
-            elseif Id==9
-                s=40
-            elseif Id==10
-                s=60
-            elseif Id==11
-                s=100
-            else
-                s=122
-            end
-
             if k_Pu==2
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=0
+
+                if Id==1
+                    s=12
+                elseif Id==2
+                    s=25
+                elseif Id==3
+                    s=20
+                elseif Id==4
+                    s=30
+                elseif Id==5
+                    s=60
+                elseif Id==6
+                    s=72
+                elseif Id==7
+                    s=40
+                elseif Id==8
+                    s=66
+                elseif Id==9
+                    s=40
+                elseif Id==10
+                    s=60
+                elseif Id==11
+                    s=100
+                else
+                    s=122
+                end
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-            end
-            println("Approximate stability number: alpha=",1/opt_val)
-                                                                                    
-            println()
-            println("-------------------------------")
-            println()
+                    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
+                
+                println("Approximate stability number: alpha=",1/opt_val)
+
+                println()
+                println("-------------------------------")
+                println()
 
 
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=2
-                                                            
-            if Id==1
-                s=12
-            elseif Id==2
-                s=25
-            elseif Id==3
-                s=20
-            elseif Id==4
-                s=30
-            elseif Id==5
-                s=60
-            elseif Id==6
-                s=72
-            elseif Id==7
-                s=40
-            elseif Id==8
-                s=66
-            elseif Id==9
-                s=40
-            elseif Id==10
-                s=60
-            elseif Id==11
-                s=100
-            else
-                s=122
-            end
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=2
 
-            if k_Pu==2
+                if Id==1
+                    s=12
+                elseif Id==2
+                    s=25
+                elseif Id==3
+                    s=20
+                elseif Id==4
+                    s=30
+                elseif Id==5
+                    s=60
+                elseif Id==6
+                    s=72
+                elseif Id==7
+                    s=40
+                elseif Id==8
+                    s=66
+                elseif Id==9
+                    s=40
+                elseif Id==10
+                    s=60
+                elseif Id==11
+                    s=100
+                else
+                    s=122
+                end
+
+            
 
                 @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-            end
-            println("Approximate stability number: alpha=",1/opt_val)                                                                        
+            
+                println("Approximate stability number: alpha=",1/opt_val)                                                                        
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+            end
         end
     end
     
@@ -816,90 +809,90 @@ function test_compute_stability_number_of_graph_ball_constr(data)
             println()
             println("-------------------------------")
             println()
-
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=0
-                                                            
-            if Id==1
-                s=13
-            elseif Id==2
-                s=25
-            elseif Id==3
-                s=23
-            elseif Id==4
-                s=30
-            elseif Id==5
-                s=70
-            elseif Id==6
-                s=71
-            elseif Id==7
-                s=64
-            elseif Id==8
-                s=66
-            elseif Id==9
-                s=64
-            elseif Id==10
-                s=60
-            elseif Id==11
-                s=40
-            else
-                s=122
-            end
-
             if k_Pu==2
+
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=0
+
+                if Id==1
+                    s=13
+                elseif Id==2
+                    s=25
+                elseif Id==3
+                    s=23
+                elseif Id==4
+                    s=30
+                elseif Id==5
+                    s=70
+                elseif Id==6
+                    s=71
+                elseif Id==7
+                    s=64
+                elseif Id==8
+                    s=66
+                elseif Id==9
+                    s=64
+                elseif Id==10
+                    s=60
+                elseif Id==11
+                    s=40
+                else
+                    s=122
+                end
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-            end
-            println("Approximate stability number: alpha=",1/opt_val)
-                                                                                                            
-                                                                                                            
-            println()
-            println("-------------------------------")
-            println()
+                    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
+                
+                println("Approximate stability number: alpha=",1/opt_val)
 
 
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=2
-                                                            
-            if Id==1
-                s=13
-            elseif Id==2
-                s=14
-            elseif Id==3
-                s=23
-            elseif Id==4
-                s=24
-            elseif Id==5
-                s=70
-            elseif Id==6
-                s=71
-            elseif Id==7
-                s=64
-            elseif Id==8
-                s=65
-            elseif Id==9
-                s=64
-            elseif Id==10
-                s=65
-            elseif Id==11
-                s=121
-            else
-                s=121
-            end
+                println()
+                println("-------------------------------")
+                println()
 
-            if k_Pu==2
+
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=2
+
+                if Id==1
+                    s=13
+                elseif Id==2
+                    s=14
+                elseif Id==3
+                    s=23
+                elseif Id==4
+                    s=24
+                elseif Id==5
+                    s=70
+                elseif Id==6
+                    s=71
+                elseif Id==7
+                    s=64
+                elseif Id==8
+                    s=65
+                elseif Id==9
+                    s=64
+                elseif Id==10
+                    s=65
+                elseif Id==11
+                    s=121
+                else
+                    s=121
+                end
+
+            
 
                 @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-            end
-            println("Approximate stability number: alpha=",1/opt_val)                                                                                                
+            
+                println("Approximate stability number: alpha=",1/opt_val)                                                                                                
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+            end
+                                                                                                                
         end
     end
     
@@ -961,39 +954,40 @@ function test_deciding_copositivity(data)
             println()
             println("-------------------------------")
             println()
-
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=0
-                                                            
-            if Id==1
-                s=4
-            elseif Id==2
-                s=8
-            elseif Id==3
-                s=8
-            elseif Id==4
-                s=13
-            elseif Id==5
-                s=10
-            elseif Id==6
-                s=20
-            elseif Id==7
-                s=10
-            else
-                s=19
-            end
-
-
             if k_Pu==2
+
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=0
+
+                if Id==1
+                    s=4
+                elseif Id==2
+                    s=8
+                elseif Id==3
+                    s=8
+                elseif Id==4
+                    s=13
+                elseif Id==5
+                    s=10
+                elseif Id==6
+                    s=20
+                elseif Id==7
+                    s=10
+                else
+                    s=19
+                end
+
+
+            
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=true)
-            end
+            
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+                                                                                                                                           end
         end
     end
     
@@ -1059,34 +1053,36 @@ function test_deciding_nonegativity(data)
             println("-------------------------------")
             println()
 
+                                                                                                                                           if k_Pu==2
 
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=0
-                                                            
-            if Id==1
-                s=4
-            elseif Id==2
-                s=8
-            elseif Id==3
-                s=5
-            elseif Id==4
-                s=11
-            elseif Id==5
-                s=20
-            else
-                s=44
-            end
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=0
 
-            if k_Pu==2
+                if Id==1
+                    s=4
+                elseif Id==2
+                    s=8
+                elseif Id==3
+                    s=5
+                elseif Id==4
+                    s=11
+                elseif Id==5
+                    s=20
+                else
+                    s=44
+                end
+
+            
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=true)
-            end
+            
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+                                                                                                                                           end
         end
     end
     
@@ -1152,35 +1148,36 @@ function test_dense_POP_binary_constr_random(data)
             println()
             println("-------------------------------")
             println()
-
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            k=1
-                                                            
-            if Id==1
-                s=7
-            elseif Id==2
-                s=11
-            elseif Id==3
-                s=15
-            elseif Id==4
-                s=21
-            elseif Id==5
-                s=20
-            else
-                s=31
-            end
-
             if k_Pu==2
+
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                k=1
+                                                            
+                if Id==1
+                    s=7
+                elseif Id==2
+                    s=11
+                elseif Id==3
+                    s=15
+                elseif Id==4
+                    s=21
+                elseif Id==5
+                    s=20
+                else
+                    s=31
+                end
+
+            
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
 
-            end
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+           
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+                                                                                                                                           end
         end
     end
     
@@ -1267,81 +1264,82 @@ function test_MAXCUT(data)
             println("-------------------------------")
             println()
 
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            if Id in [1;3;5;7]
-                k=0
-            else
-                k=1
-            end
-                                                            
-            if Id==1
-                s=16
-            elseif Id==2
-                s=16
-            elseif Id==3
-                s=19
-            elseif Id==4
-                s=19
-            elseif Id==5
-                s=28
-            elseif Id==6
-                s=28
-            elseif Id==7
-                s=50
-            else
-                s=50
-            end
-
             if k_Pu==2
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                if Id in [1;3;5;7]
+                    k=0
+                else
+                    k=1
+                end
+
+                if Id==1
+                    s=16
+                elseif Id==2
+                    s=16
+                elseif Id==3
+                    s=19
+                elseif Id==4
+                    s=19
+                elseif Id==5
+                    s=28
+                elseif Id==6
+                    s=28
+                elseif Id==7
+                    s=50
+                else
+                    s=50
+                end
+
+            
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
                 lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",comp_opt_sol=false)
-            end
-            println("Approximate maximum cut: val=",-opt_val)
             
+                println("Approximate maximum cut: val=",-opt_val)
+
+
+                println()
+                println("-------------------------------")
+                println()
+
+
+                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+                if Id in [1;3;5;7]
+                    k=2
+                else
+                    k=3
+                end
+
+                if Id==1
+                    s=16
+                elseif Id==2
+                    s=16
+                elseif Id==3
+                    s=19
+                elseif Id==4
+                    s=19
+                elseif Id==5
+                    s=28
+                elseif Id==6
+                    s=28
+                elseif Id==7
+                    s=50
+                else
+                    s=50
+                end
+
             
-            println()
-            println("-------------------------------")
-            println()
-
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-            if Id in [1;3;5;7]
-                k=2
-            else
-                k=3
-            end
-                                                            
-            if Id==1
-                s=16
-            elseif Id==2
-                s=16
-            elseif Id==3
-                s=19
-            elseif Id==4
-                s=19
-            elseif Id==5
-                s=28
-            elseif Id==6
-                s=28
-            elseif Id==7
-                s=50
-            else
-                s=50
-            end
-
-            if k_Pu==2
 
                 @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",L=n);
-            end
-            println("Approximate maximum cut: val=",-opt_val)
+           
+                println("Approximate maximum cut: val=",-opt_val)
 
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
+                println()
+                println("-------------------------------")
+                println("-------------------------------")
+                println()
+            end
         end
     end
     
