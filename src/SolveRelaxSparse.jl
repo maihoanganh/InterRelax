@@ -303,6 +303,7 @@ function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{U
 
     opt_val = value(lambda)
     println("Termination status = ", termination_status(model))
+    println("Primal status = ", primal_status(model))
     println("Optimal value = ",opt_val)
     
     

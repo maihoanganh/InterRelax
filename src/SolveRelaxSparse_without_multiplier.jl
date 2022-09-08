@@ -302,6 +302,7 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
 
     opt_val = value(lambda)
     println("Termination status = ", termination_status(model))
+    println("Primal status = ", primal_status(model))
     println("Optimal value = ",opt_val)
     
     opt_sol=[Vector{Float64}([]) for t in 1:p]

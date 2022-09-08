@@ -1357,7 +1357,7 @@ function test_CertifyNNHousing(data)
     opt_val=0.0
     
     
-    D = matread(data*"/WeightsHousing3.mat");
+    D = matread(data*"/WeightsHousing4.mat");
     W1 = D["W1"]; W2 = D["W2"]; c = D["c"]; x_bar=D["x_bar"]; y_bar=D["y_bar"]
     eps = 0.1;
 
@@ -1432,9 +1432,9 @@ function test_CertifyNNHousing(data)
             n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
             k=k_Pu
             if k_Pu==1
-                u=8
+                u=21
             else
-                u=20
+                u=33
             end
             println("Maximal matrix size: ",binomial(u+k,k))
             opt_val=TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
@@ -1453,7 +1453,7 @@ function test_CertifyNNHousing(data)
                 k=1
             end
 
-            s=22
+            s=36
 
 
             d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
@@ -1476,7 +1476,7 @@ function test_CertifyNNHousing(data)
                 k=3
             end
 
-            s=22
+            s=36
 
 
             L=100*ones(Float64,100)
