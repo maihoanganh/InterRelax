@@ -88,8 +88,8 @@ function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{U
     
     
     sk=Vector{UInt64}(undef,p)
-    sk_g=Vector{Vector{UInt64}}(undef,p)
-    sk_h=Vector{Vector{UInt64}}(undef,p)
+    sk_g=Vector{Vector{Int64}}(undef,p)
+    sk_h=Vector{Vector{Int64}}(undef,p)
     
     r=1
     q=1
@@ -128,8 +128,8 @@ function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{U
         
         sk[t]=binomial(k+d+lI[t],lI[t])
 
-        sk_g[t]=Vector{UInt64}(undef,lJ[t])
-        sk_h[t]=Vector{UInt64}(undef,lW[t])
+        sk_g[t]=Vector{Int64}(undef,lJ[t])
+        sk_h[t]=Vector{Int64}(undef,lW[t])
 
 
         @fastmath @inbounds @simd for i in 1:lJ[t]

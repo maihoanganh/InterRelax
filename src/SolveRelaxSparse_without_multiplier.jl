@@ -79,8 +79,8 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
     
     
     sk=Vector{UInt64}(undef,p)
-    sk_g=Vector{Vector{Vector{UInt64}}}(undef,p)
-    sk_h=Vector{Vector{UInt64}}(undef,p)
+    sk_g=Vector{Vector{Vector{Int64}}}(undef,p)
+    sk_h=Vector{Vector{Int64}}(undef,p)
     
     
     
@@ -130,11 +130,11 @@ function RelaxSparse_without_multiplier1(n::Int64,m::Int64,l::Int64,lmon_g::Vect
         
         sk[t]=binomial(k+lI[t],lI[t])
 
-        sk_g[t]=Vector{Vector{UInt64}}(undef,lJ[t])
-        sk_h[t]=Vector{UInt64}(undef,lW[t])
+        sk_g[t]=Vector{Vector{Int64}}(undef,lJ[t])
+        sk_h[t]=Vector{Int64}(undef,lW[t])
         
         for i in 1:lJ[t]
-            sk_g[t][i]=Vector{UInt64}(undef,k-dg[J[t][i]]+1)
+            sk_g[t][i]=Vector{Int64}(undef,k-dg[J[t][i]]+1)
             for r in 0:k-dg[J[t][i]]
                 sk_g[t][i][r+1]=binomial(k-dg[J[t][i]]-r+lI[t],lI[t])
             end

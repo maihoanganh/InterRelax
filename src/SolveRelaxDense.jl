@@ -37,8 +37,8 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     
     
     sk=binomial(k+df+n,n)
-    sk_g=Vector{UInt64}(undef,m)
-    sk_h=Vector{UInt64}(undef,l)
+    sk_g=Vector{Int64}(undef,m)
+    sk_h=Vector{Int64}(undef,l)
     
     
     
@@ -168,7 +168,7 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     
 
     for i in 1:l
-        H[i]=@variable(model, [1:sk_h[i]])
+        H[i]=@variable(model,[1:sk_h[i]])
         for p in 1:sk_h[i]
             for z in 1:lmon_h[i]
                   @inbounds add_to_expression!(cons[bfind(supp_U,lsupp_U,2*v[:,p]+supp_h[i][:,z],n)],coe_h[i][z]*H[i][p])

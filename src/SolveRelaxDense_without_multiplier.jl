@@ -48,7 +48,7 @@ function RelaxDense_without_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector
      
     sk=binomial(k+n,n)
     sk_g=Vector{Vector{Int64}}(undef,m)
-    sk_h=Vector{UInt64}(undef,l)
+    sk_h=Vector{Int64}(undef,l)
 
     for i in 1:m
         sk_g[i]=Vector{Int64}(undef,k-dg[i]+1)
