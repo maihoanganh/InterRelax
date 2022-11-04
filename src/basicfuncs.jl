@@ -86,7 +86,6 @@ function get_info(x::Vector{PolyVar{true}},f::Polynomial{true,Float64},g::Vector
     for i in 1:m
         dg[i]=maxdegree(g[i])
         lmon_g[i],supp_g[i],coe_g[i]=info(g[i],x,n;sparse=sparse)
-        
     end
                     
     for i in 1:l

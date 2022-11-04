@@ -132,7 +132,7 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     cons=[AffExpr(0) for i=1:lsupp_U]
 
     G=Vector{Vector{Union{VariableRef,Symmetric{VariableRef,Array{VariableRef,2}}}}}(undef, m)
-    H=Vector{Vector{VariableRef}}(undef, l)
+    H=Vector{Vector{VariableRef}}(undef,l)
 
 
 
