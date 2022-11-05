@@ -662,7 +662,7 @@ function test_compute_stability_number_of_graph(data)
                 elseif Id==9
                     s=40
                 elseif Id==10
-                    s=60
+                    s=66
                 elseif Id==11
                     s=100
                 else
