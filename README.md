@@ -74,7 +74,7 @@ The following codes are to run the paper's benchmarks:
 ```ruby
 using InterRelax
 
-data="/home/hoanganh/Desktop/math-topics/InterruptedRelax/codes/dataPOP2" # path of data 
+data="/home/mpc-linux-01/dataPOP2" # path of data 
 #The path needs to be changed on the user's computer
 
 InterRelax.test()

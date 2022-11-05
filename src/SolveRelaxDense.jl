@@ -48,7 +48,7 @@ function RelaxDense(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::Ve
     
     
     supp_U=sortslices(supp_U,dims=2)
-    lsupp_U=size(supp_U,2)   
+    lsupp_U=size(supp_U,2)
    
      
     
