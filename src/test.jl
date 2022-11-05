@@ -701,7 +701,7 @@ function test_compute_stability_number_of_graph(data)
                 elseif Id==9
                     s=40
                 elseif Id==10
-                    s=60
+                    s=66
                 elseif Id==11
                     s=100
                 else
@@ -817,27 +817,27 @@ function test_compute_stability_number_of_graph_ball_constr(data)
                 if Id==1
                     s=13
                 elseif Id==2
-                    s=25
+                    s=13
                 elseif Id==3
                     s=23
                 elseif Id==4
-                    s=30
+                    s=23
                 elseif Id==5
                     s=70
                 elseif Id==6
-                    s=71
+                    s=70
                 elseif Id==7
                     s=64
                 elseif Id==8
-                    s=66
+                    s=64
                 elseif Id==9
                     s=64
                 elseif Id==10
-                    s=60
+                    s=64
                 elseif Id==11
-                    s=40
+                    s=121
                 else
-                    s=122
+                    s=121
                 end
 
                 @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
@@ -857,23 +857,23 @@ function test_compute_stability_number_of_graph_ball_constr(data)
                 if Id==1
                     s=13
                 elseif Id==2
-                    s=14
+                    s=13
                 elseif Id==3
                     s=23
                 elseif Id==4
-                    s=24
+                    s=23
                 elseif Id==5
                     s=70
                 elseif Id==6
-                    s=71
+                    s=70
                 elseif Id==7
                     s=64
                 elseif Id==8
-                    s=65
+                    s=64
                 elseif Id==9
                     s=64
                 elseif Id==10
-                    s=65
+                    s=64
                 elseif Id==11
                     s=121
                 else
