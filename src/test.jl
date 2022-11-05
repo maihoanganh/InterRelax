@@ -710,7 +710,7 @@ function test_compute_stability_number_of_graph(data)
 
             
 
-                @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
             
                 println("Approximate stability number: alpha=",1/opt_val)                                                                        
@@ -882,7 +882,7 @@ function test_compute_stability_number_of_graph_ball_constr(data)
 
             
 
-                @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
             
                 println("Approximate stability number: alpha=",1/opt_val)                                                                                                
@@ -1330,7 +1330,7 @@ function test_MAXCUT(data)
 
             
 
-                @time opt_val,_=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+                @time opt_val=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
     lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",L=n);
            
                 println("Approximate maximum cut: val=",-opt_val)
