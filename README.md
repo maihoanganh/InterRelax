@@ -82,10 +82,10 @@ InterRelax.test_AMGM() #Table 1
 InterRelax.test_dense_POP_arbcons(data) #Tables 3
 InterRelax.test_compute_stability_number_of_graph(data) #Table 4
 InterRelax.test_compute_stability_number_of_graph_ball_constr(data) #Table 5
-InterRelax.test_MAXCUT(data) #Table 6
-InterRelax.test_PMSV(data) #Table 7
-InterRelax.test_compute_stability_number_of_graph_random(data) #Table 8
-InterRelax.test_deciding_copositivity(data) #Table 9
+InterRelax.test_MAXCUT(data) #Table 6 ok
+InterRelax.test_PMSV(data) #Table 7 ok
+InterRelax.test_compute_stability_number_of_graph_random(data) #Table 8 ok
+InterRelax.test_deciding_copositivity(data) #Table 9 ok
 InterRelax.test_deciding_nonegativity(data) #Table 10
 InterRelax.test_dense_POP_binary_constr_random(data) #Table 11
 

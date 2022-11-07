@@ -1053,7 +1053,7 @@ function test_deciding_nonegativity(data)
             println("-------------------------------")
             println()
 
-                                                                                                                                           if k_Pu==2
+                                                                                                                                           if k_Pu==3
 
                 n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
                 k=0
