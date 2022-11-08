@@ -1415,7 +1415,7 @@ function test_CertifyNNHousing(data)
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
     
     
-    for i in [1;3]
+    for i in [1;2]
         
         f=(c[y_bar+1,:]-c[i,:])'*x3
         f=f([x1;x2;x3]=>[x1+x_bar[1,:]-eps*ones(Float64,m1);x2;x3])
@@ -1473,7 +1473,7 @@ function test_CertifyNNHousing(data)
                 s=35
 
 
-                d=2#Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
+                d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
 
             
 
