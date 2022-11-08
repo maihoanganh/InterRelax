@@ -2,9 +2,8 @@ function RelaxSparse(n::Int64,m::Int64,l::Int64,lmon_g::Vector{UInt64},supp_g::V
     
     println("**Interrupted relaxation based on Polya's Positivstellensatz**")
     println("Relaxation order: k=",k)
-    println("Objective degree with upper bound: d=",d)
+    println("Objective degree upper bound: d=",d)
     println("Factor width upper bound: s=",s)
-    
     
     if k>0
         return RelaxSparse_with_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign=assign,alg=alg,minimize=minimize,solver=solver,comp_opt_sol=comp_opt_sol,order=order)
