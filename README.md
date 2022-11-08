@@ -89,7 +89,7 @@ InterRelax.test_deciding_copositivity(data) #Table 9 ok
 InterRelax.test_deciding_nonegativity(data) #Table 10 ok
 InterRelax.test_dense_POP_binary_constr_random(data) #Table 11 ok
 
-InterRelax.test_CS_POP_arbcons(data) #Tables 13
+InterRelax.test_CS_POP_arbcons(data) #Tables 13 ok
 InterRelax.test_CertifyNNHousing(data) #Table 15
 
 ```

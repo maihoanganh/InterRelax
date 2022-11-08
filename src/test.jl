@@ -1594,8 +1594,13 @@ end
                 u=74
             end
             println("Maximal matrix size: ",binomial(u+k,k))
-            opt_val=TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
-            println("Upper bound: val=",-opt_val)
+            if binomial(u+k,k)>500
+                println("Out of memory!")
+            else
+                opt_val=TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+                println("Upper bound: val=",-opt_val)
+            
+            end
             
             println()
             println("-------------------------------")
