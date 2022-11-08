@@ -1473,7 +1473,7 @@ function test_CertifyNNHousing(data)
                 s=35
 
 
-                d=Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
+                d=2#Int64(maximum([sum(supp_f[:,j]) for j in 1:lmon_f]))+1
 
             
 
