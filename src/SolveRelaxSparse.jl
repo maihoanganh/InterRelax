@@ -35,10 +35,6 @@ function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{U
         lJ[t]+=1
     end
     
-    
-    
-    
-    
     println("  Number of cliques: p=", p)
     println("  Largest clique size: u=", maximum(lI))
     #println("  Possible largest block size: ", binomial(maximum(lI)+k,n))
@@ -256,8 +252,7 @@ function RelaxSparse_with_multiplier(n::Int64,m::Int64,l::Int64,lmon_g::Vector{U
             cons[t][i]-=coe_thetakU[t][i]
         end
 
-        @constraint(model, cons[t].==0)                
-        
+        @constraint(model, cons[t].==0)                   
                     
     end   
                     

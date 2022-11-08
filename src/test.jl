@@ -276,11 +276,10 @@ function test_CS_POP_arbcons(data)
                 k=k_Pu
                 println("**Semidefinite relaxation based on Putinar's Positivstellensatz**")
                 println("Relaxation order: k=",k)
-                println("Maximal matrix size: ",binomial(u+k,k))
-                if binomial(u+k,k)>250
+                println("Maximal matrix size: ",binomial(u+k+1,k))
+                if binomial(u+k+1,k)>250
                     println("Out of memory!")
                 else
-                    println("Maximal matrix size: ",binomial(u+1+k,k))
                     TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
                 end
                 println()
@@ -1448,7 +1447,7 @@ function test_CertifyNNHousing(data)
             println("**Semidefinite relaxation based on Putinar's Positivstellensatz**")
             println("Relaxation order: k=",k)
             println("Maximal matrix size: ",binomial(u+k,k))
-            if binomial(u+k,k)>500
+            if binomial(u+k+1,k)>500
                 println("Out of memory!")
             else
             
@@ -1612,7 +1611,7 @@ end
             println("**Semidefinite relaxation based on Putinar's Positivstellensatz**")
             println("Relaxation order: k=",k)
             println("Maximal matrix size: ",binomial(u+k,k))
-            if binomial(u+k,k)>500
+            if binomial(u+k+1,k)>500
                 println("Out of memory!")
             else
                 opt_val=TSSOS_CS(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
