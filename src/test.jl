@@ -277,7 +277,7 @@ function test_CS_POP_arbcons(data)
                 println("**Semidefinite relaxation based on Putinar's Positivstellensatz**")
                 println("Relaxation order: k=",k)
                 println("Maximal matrix size: ",binomial(u+k,k))
-                if binomial(u+k,k)>500
+                if binomial(u+k,k)>250
                     println("Out of memory!")
                 else
                     println("Maximal matrix size: ",binomial(u+1+k,k))
