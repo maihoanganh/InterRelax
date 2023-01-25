@@ -8,7 +8,7 @@ function TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f
     opt=0.0
     vars,pop=get_POP(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f)
     
-    if binomial(n+k,k)>500
+    if binomial(n+k,k)>450
         println("Out of memory!")
     else
         try

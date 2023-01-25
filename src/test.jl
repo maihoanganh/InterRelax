@@ -153,11 +153,7 @@ function test_dense_POP_arbcons(data)
                 
                 include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
                 k=k_Pu
-		if binomial(n1+k,k)>450
-                    println("Out of memory!")
-                else
-                    TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
-	        end
+		TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
                 
 
 
