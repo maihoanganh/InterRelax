@@ -153,7 +153,11 @@ function test_dense_POP_arbcons(data)
                 
                 include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
                 k=k_Pu
-                TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+		if binomial(n1+k,k)>450
+                    println("Out of memory!")
+                else
+                    TSSOS_Dense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,k)
+	        end
                 
 
 
@@ -164,7 +168,7 @@ function test_dense_POP_arbcons(data)
                 if k_Pu==2
                     include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
 
-                    if Id in [1;2;3;5;7;8;9;10]
+                    if Id in [2;8;10]
                         k=0
                     else
                         k=1
@@ -199,13 +203,13 @@ function test_dense_POP_arbcons(data)
 
                     include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
 
-                    if Id in [1;2;3;5;7;8;9]
+                    if Id in [2;8]
                         k=2
                     else
                         k=3
                     end
 
-                    if Id in [1;3;4;5;7;9;11]
+                    if Id==4
                         s=1
                     elseif Id==2
                         s=5

@@ -70,7 +70,7 @@ optimization on the nonnegative orthant. 2022. Forthcoming.**
 
 To get the paper's benchmarks, download the zip file in this [link](https://drive.google.com/file/d/1xGG1NqDk9NDtBmu0bd2FmxZpz1kYeZp6/view?usp=sharing) and unzip the file.
 
-The following codes are to run the paper's benchmarks:
+The following codes are to run the paper's benchmarks in Julia:
 ```ruby
 using InterRelax
 
@@ -82,12 +82,12 @@ InterRelax.test_AMGM() #Table 1
 InterRelax.test_dense_POP_arbcons(data) #Tables 3
 InterRelax.test_compute_stability_number_of_graph(data) #Table 4
 InterRelax.test_compute_stability_number_of_graph_ball_constr(data) #Table 5
-InterRelax.test_MAXCUT(data) #Table 6 ok
-InterRelax.test_PMSV(data) #Table 7 ok
-InterRelax.test_compute_stability_number_of_graph_random(data) #Table 8 ok
-InterRelax.test_deciding_copositivity(data) #Table 9 ok
-InterRelax.test_deciding_nonegativity(data) #Table 10 ok
-InterRelax.test_dense_POP_binary_constr_random(data) #Table 11 ok
+InterRelax.test_MAXCUT(data) #Table 6
+InterRelax.test_PMSV(data) #Table 7
+InterRelax.test_compute_stability_number_of_graph_random(data) #Table 8
+InterRelax.test_deciding_copositivity(data) #Table 9
+InterRelax.test_deciding_nonegativity(data) #Table 10
+InterRelax.test_dense_POP_binary_constr_random(data) #Table 11
 
 InterRelax.test_CS_POP_arbcons(data) #Tables 13
 InterRelax.test_CertifyNNHousing(data) #Table 15
