@@ -79,7 +79,7 @@ data="/home/mpc-linux-01/dataPOP2" # path of data
 
 InterRelax.test()
 InterRelax.test_AMGM() #Table 1
-InterRelax.test_dense_POP_arbcons(data) #Tables 3
+InterRelax.test_dense_POP_arbcons(data) #Table 3
 InterRelax.test_compute_stability_number_of_graph(data) #Table 4
 InterRelax.test_compute_stability_number_of_graph_ball_constr(data) #Table 5
 InterRelax.test_MAXCUT(data) #Table 6
