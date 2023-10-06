@@ -79,16 +79,16 @@ data="/home/mpc-linux-01/dataPOP2" # path of data
 
 InterRelax.test()
 InterRelax.test_AMGM() #Table 1
-InterRelax.test_dense_POP_arbcons(data) #Table 3
-InterRelax.test_compute_stability_number_of_graph(data) #Table 4
-InterRelax.test_compute_stability_number_of_graph_ball_constr(data) #Table 5
-InterRelax.test_MAXCUT(data) #Table 6
-InterRelax.test_PMSV(data) #Table 7
-InterRelax.test_compute_stability_number_of_graph_random(data) #Table 8
-InterRelax.test_deciding_copositivity(data) #Table 9
-InterRelax.test_deciding_nonegativity(data) #Table 10
-InterRelax.test_dense_POP_binary_constr_random(data) #Table 11
-
+InterRelax.test_compare_with_sign_sym() #Table 2
+InterRelax.test_dense_POP_arbcons(data) #Table 4
+InterRelax.test_compute_stability_number_of_graph(data) #Table 5
+InterRelax.test_compute_stability_number_of_graph_ball_constr(data) #Table 6
+InterRelax.test_MAXCUT(data) #Table 7
+InterRelax.test_PMSV(data) #Table 8
+InterRelax.test_compute_stability_number_of_graph_random(data) #Table 9
+InterRelax.test_deciding_copositivity(data) #Table 10
+InterRelax.test_deciding_nonegativity(data) #Table 11
+InterRelax.test_dense_POP_binary_constr_random(data) #Table 12
 InterRelax.test_CS_POP_arbcons(data) #Tables 13
 InterRelax.test_CertifyNNHousing(data) #Table 15
 

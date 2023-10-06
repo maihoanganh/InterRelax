@@ -33,14 +33,6 @@ function test()
     println()
     println("-------------------------------")
     println()
-    println("Dense case:")
-    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=false);
-    k=2
-    @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-                lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek")
-    println()
-    println("-------------------------------")
-    println()
     println("Sparse case:")
     n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
     k=2
@@ -56,13 +48,6 @@ function test()
     s=3 # sparsity order
     d=2 
     @time RelaxSparse(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,d,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false)
-    println()
-    println("-------------------------------")
-    println()
-    println("Sparse case:")
-    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=InterRelax.get_info(x,f,g,h,sparse=true)
-    k=2
-    @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false);
     
 end
 
@@ -197,36 +182,7 @@ function test_dense_POP_arbcons(data)
                     println()
 
 
-                    include(data*"/densePOPvar$(n1)nineq$(m1)neq$(l1).jl")
-
-                    if Id in [2;8]
-                        k=2
-                    else
-                        k=3
-                    end
-
-                    if Id==4
-                        s=1
-                    elseif Id==2
-                        s=5
-                    elseif Id==8
-                        s=10
-                    elseif Id==6
-                        s=7
-                    elseif Id==10
-                        s=20
-                    else
-                        s=15
-                    end
-
-
-
-                    @time RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
                     
-                    println()
-                    println("-------------------------------")
-                    println("-------------------------------")
-                    println()
                 end
             end
         end
@@ -320,38 +276,6 @@ function test_CS_POP_arbcons(data)
                     println("-------------------------------")
                     println()
 
-
-                    include(data*"/sparsePOPcliq$(u)nineq$(m1)neq$(l1).jl")
-
-                    if Id in [1;2;3;5;6;7]
-                        k=2
-                    else
-                        k=3
-                    end
-
-                    if Id in [1;3;5]
-                        s=1
-                    elseif Id==2
-                        s=7
-                    elseif Id==4
-                        s=10
-                    elseif Id==6
-                        s=15
-                    elseif Id==7
-                        s=2
-                    else
-                        s=20
-                    end
-
-
-                    
-
-                    @time RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=ones(Float64,150))
-                    
-                    println()
-                    println("-------------------------------")
-                    println("-------------------------------")
-                    println()
                 end
             end
         end
@@ -685,47 +609,6 @@ function test_compute_stability_number_of_graph(data)
                 println("-------------------------------")
                 println()
 
-
-                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-                k=2
-
-                if Id==1
-                    s=12
-                elseif Id==2
-                    s=25
-                elseif Id==3
-                    s=20
-                elseif Id==4
-                    s=30
-                elseif Id==5
-                    s=60
-                elseif Id==6
-                    s=72
-                elseif Id==7
-                    s=40
-                elseif Id==8
-                    s=66
-                elseif Id==9
-                    s=40
-                elseif Id==10
-                    s=66
-                elseif Id==11
-                    s=100
-                else
-                    s=122
-                end
-
-            
-
-                @time opt_val=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-            
-                println("Approximate stability number: alpha=",1/opt_val)                                                                        
-
-                println()
-                println("-------------------------------")
-                println("-------------------------------")
-                println()
             end
         end
     end
@@ -857,47 +740,6 @@ function test_compute_stability_number_of_graph_ball_constr(data)
                 println("-------------------------------")
                 println()
 
-
-                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-                k=2
-
-                if Id==1
-                    s=13
-                elseif Id==2
-                    s=13
-                elseif Id==3
-                    s=23
-                elseif Id==4
-                    s=23
-                elseif Id==5
-                    s=70
-                elseif Id==6
-                    s=70
-                elseif Id==7
-                    s=64
-                elseif Id==8
-                    s=64
-                elseif Id==9
-                    s=64
-                elseif Id==10
-                    s=64
-                elseif Id==11
-                    s=121
-                else
-                    s=121
-                end
-
-            
-
-                @time opt_val=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek");
-            
-                println("Approximate stability number: alpha=",1/opt_val)                                                                                                
-
-                println()
-                println("-------------------------------")
-                println("-------------------------------")
-                println()
             end
                                                                                                                 
         end
@@ -1310,42 +1152,6 @@ function test_MAXCUT(data)
                 println()
 
 
-                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
-                if Id in [1;3;5;7]
-                    k=2
-                else
-                    k=3
-                end
-
-                if Id==1
-                    s=16
-                elseif Id==2
-                    s=16
-                elseif Id==3
-                    s=19
-                elseif Id==4
-                    s=19
-                elseif Id==5
-                    s=28
-                elseif Id==6
-                    s=28
-                elseif Id==7
-                    s=50
-                else
-                    s=50
-                end
-
-            
-
-                @time opt_val=RelaxDense_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-    lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek",L=n);
-           
-                println("Approximate maximum cut: val=",-opt_val)
-
-                println()
-                println("-------------------------------")
-                println("-------------------------------")
-                println()
             end
         end
     end
@@ -1485,29 +1291,6 @@ function test_CertifyNNHousing(data)
                 println("-------------------------------")
                 println()
 
-
-                n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
-
-                if Id in [1;3]
-                    k=2
-                else
-                    k=3
-                end
-
-                s=35
-
-
-                L=100*ones(Float64,100)
-            
-
-                @time opt_val,_=RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh,s,k,assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false,L=L);
-            
-                println("Upper bound: val=",-opt_val)
-
-                println()
-                println("-------------------------------")
-                println("-------------------------------")
-                println()
             end
         end
     end
@@ -1643,31 +1426,87 @@ end
             println("-------------------------------")
             println()
 
-
-            n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=true)
-            
-            k=2
-            if k_Pu==1
-                s=50
-            else
-                s=76
-            end
-
-
-            L=100*ones(Float64,74)
-
-
-            @time opt_val,_=RelaxSparse_without_multiplier(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
-    lmon_f,supp_f,coe_f,dg,dh,s,k,L=L,
-    assign="min",alg="MD",minimize=true,solver="Mosek",comp_opt_sol=false);
-
-            println("Upper bound: val=",-opt_val)
-
-            println()
-            println("-------------------------------")
-            println("-------------------------------")
-            println()
         end
     end
     
 end
+
+
+function test_compare_with_sign_sym()
+    
+    Pb=0
+    Id=0
+    k=0
+    s=1
+    n=2
+    
+    @polyvar x[1:n]
+    f=x[1]+0.0
+    g=Vector{Polynomial{true,Float64}}([]);m=length(g)
+    h=[1.0-sum(x.^2)];l=length(h)
+    n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+    opt_val=1.0
+                
+    
+    
+    for n in [100,200]
+            
+        Pb+=1
+        
+        println("Ordinal number of POP: Pb=",Pb)
+
+        @polyvar x[1:n]
+        a=ones(Float64,n)/n
+        f=-sum((x-a).^2)
+        g=[1.0-sum(x)];m=length(g)
+        l=0
+        h=Vector{Polynomial{true,Float64}}(undef,l);l=length(h)
+
+
+        println("***Problem setting***")
+        println("Number of variables: n=",n)
+        println("Number of inequality constraints: m=",m+1)
+        println("Number of equality constraints: l=",l)
+        println()
+        println("-------------------------------")
+        println()
+
+        Id+=1
+        println("Ordinal number of SDP: Id=",Id)
+        println()
+        println("-------------------------------")
+        println()
+
+        k=2
+
+
+        pop=[[f(x=>x.^2)];[g[j](x=>x.^2) for j in 1:m]]#;[h[j](x=>x.^2) for j in 1:l]]
+        @time begin
+            opt_val,sol,data=TSSOS.tssos_first(pop,x,k,numeq=l,TS="block",solver="Mosek");
+            #opt,sol,data =TSSOS.tssos_higher!(data, TS="block")
+        end;
+
+
+        println()
+        println("-------------------------------")
+        println()
+
+        n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,lmon_f,supp_f,coe_f,dg,dh=get_info(x,f,g,h,sparse=false)
+
+        k=0
+
+        s=5
+
+        @time opt_val,_=RelaxDense(n,m,l,lmon_g,supp_g,coe_g,lmon_h,supp_h,coe_h,
+lmon_f,supp_f,coe_f,dg,dh,k,s,solver="Mosek")
+
+
+        println()
+        println("-------------------------------")
+        println("-------------------------------")
+        println()
+        
+    end
+    
+end
+           
